@@ -83,6 +83,10 @@ public class ReforgedBingo {
         return this.locale;
     }
 
+    public Database getDatabase() {
+        return this.database;
+    }
+
     public boolean isBlacklisted(EnumSpecies pokemon) {
         if (pokemon.isLegendary() || pokemon.isUltraBeast()) {
             return true;

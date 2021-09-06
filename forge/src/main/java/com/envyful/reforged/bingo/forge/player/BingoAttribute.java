@@ -2,12 +2,18 @@ package com.envyful.reforged.bingo.forge.player;
 
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
+import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.EnvyPlayer;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
+import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
@@ -21,19 +27,37 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     @Override
     public void load() {
-        this.started = started;
+        try (Connection connection = this.manager.getDatabase().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.LOAD_PLAYER_BINGO_CARD)) {
+            preparedStatement.setString(1, this.parent.getUuid().toString());
 
-        if (this.checkCardExpiry()) {
-            this.generateNewCard();
-            return;
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                this.generateNewCard();
+                return;
+            }
+
+            this.started = resultSet.getLong("timeStarted");
+            this.bingoCard = UtilGson.GSON.fromJson(resultSet.getString("card"), CardSlot[][].class);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        this.bingoCard = bingoCard;
     }
 
     @Override
     public void save() {
+        try (Connection connection = this.manager.getDatabase().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.UPDATE_PLAYER_BINGO_CARD)) {
 
+            preparedStatement.setString(1, this.parent.getUuid().toString());
+            preparedStatement.setString(2, UtilGson.GSON.toJson(this.bingoCard));
+            preparedStatement.setLong(3, this.started);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean checkCardExpiry() {
@@ -107,13 +131,5 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
         }
 
         return true;
-    }
-
-    public CardSlot[][] getBingoCard() {
-        return this.bingoCard;
-    }
-
-    public long getStarted() {
-        return this.started;
     }
 }

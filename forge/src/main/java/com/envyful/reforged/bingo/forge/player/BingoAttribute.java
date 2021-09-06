@@ -1,19 +1,27 @@
 package com.envyful.reforged.bingo.forge.player;
 
+import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
+import com.envyful.api.gui.factory.GuiFactory;
+import com.envyful.api.gui.item.Displayable;
+import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
@@ -135,5 +143,36 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     public long getTimeRemaining() {
         return (24 - TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - this.started));
+    }
+
+    public void display(Pane pane) {
+        Displayable complete = GuiFactory.displayableBuilder(ItemStack.class)
+                .itemStack(new ItemBuilder()
+                        .type(Item.getByNameOrId("minecraft:stained_glass_pane"))
+                        .damage(5)
+                        .name("§a§lCOMPLETE")
+                        .build()).build();
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 7; x++) {
+                if (this.bingoCard[y][x].isComplete()) {
+                    pane.set(1 + y, 1 + x, complete);
+                    continue;
+                }
+
+                CardSlot cardSlot = this.bingoCard[y][x];
+
+                pane.set(1 + y, 1 + x,
+                        GuiFactory.displayableBuilder(ItemStack.class)
+                                .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
+                                        .lore(Arrays.asList(
+                                                "§7",
+                                                "§eClick me§7 for more information about this pokemon!"
+                                        )).build())
+                                .clickHandler((envyPlayer, clickType) ->
+                                        envyPlayer.executeCommand("pwiki " + cardSlot.getSpecies().getPokemonName()))
+                                .build());
+            }
+        }
     }
 }

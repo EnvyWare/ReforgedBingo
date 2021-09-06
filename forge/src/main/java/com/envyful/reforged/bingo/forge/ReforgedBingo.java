@@ -10,6 +10,7 @@ import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoLocaleConfig;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.listener.BingoCardCompleteListener;
+import com.envyful.reforged.bingo.forge.listener.PokemonCatchListener;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +49,7 @@ public class ReforgedBingo {
         this.playerManager.registerAttribute(this, BingoAttribute.class);
 
         new BingoCardCompleteListener(this);
+        new PokemonCatchListener(this);
 
         UtilConcurrency.runAsync(() -> {
             this.database = new SimpleHikariDatabase(this.config.getDatabase());

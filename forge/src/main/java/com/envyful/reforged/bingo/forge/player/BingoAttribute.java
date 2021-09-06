@@ -166,6 +166,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                 pane.set(1 + x, 1 + y,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
+                                        .name("§b" + cardSlot.getSpecies().getLocalizedName())
                                         .lore(Arrays.asList(
                                                 "§7",
                                                 "§eClick me§7 for more information about this pokemon!"

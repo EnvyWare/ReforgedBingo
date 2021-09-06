@@ -5,6 +5,7 @@ import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
+import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.reforged.bingo.forge.command.BingoCardCommand;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
@@ -13,6 +14,7 @@ import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.listener.BingoCardCompleteListener;
 import com.envyful.reforged.bingo.forge.listener.PokemonCatchListener;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
+import com.envyful.reforged.bingo.forge.task.CardResetTask;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -64,6 +66,13 @@ public class ReforgedBingo {
                 e.printStackTrace();
             }
         });
+
+        new ForgeTaskBuilder()
+                .async(true)
+                .delay(10L)
+                .interval(10L)
+                .task(new CardResetTask(this))
+                .start();
     }
 
     public void reloadConfig() {

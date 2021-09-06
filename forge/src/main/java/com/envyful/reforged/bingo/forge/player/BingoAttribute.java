@@ -156,13 +156,13 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 7; x++) {
                 if (this.bingoCard[y][x].isComplete()) {
-                    pane.set(1 + y, 1 + x, complete);
+                    pane.set(1 + x, 1 + y, complete);
                     continue;
                 }
 
                 CardSlot cardSlot = this.bingoCard[y][x];
 
-                pane.set(1 + y, 1 + x,
+                pane.set(1 + x, 1 + y,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
                                         .lore(Arrays.asList(

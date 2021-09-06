@@ -21,7 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 public class BingoCardCommand {
 
     @CommandProcessor
-    protected void run(@Sender EntityPlayerMP player, String[] args) {
+    public void run(@Sender EntityPlayerMP player, String[] args) {
         EnvyPlayer<EntityPlayerMP> sender = ReforgedBingo.getInstance().getPlayerManager().getPlayer(player);
         BingoCardUI.open(sender);
         BingoAttribute attribute = sender.getAttribute(ReforgedBingo.class);

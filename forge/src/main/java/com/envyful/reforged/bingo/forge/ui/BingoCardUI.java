@@ -10,6 +10,7 @@ import com.envyful.reforged.bingo.forge.player.BingoAttribute;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -18,14 +19,20 @@ public class BingoCardUI {
 
     public static void open(EnvyPlayer<EntityPlayerMP> player) {
         Pane pane = GuiFactory.paneBuilder()
-                .width(9)
-                .height(6)
                 .topLeftY(0)
                 .topLeftX(0)
+                .height(6)
+                .width(9)
                 .build();
         BingoAttribute attribute = player.getAttribute(ReforgedBingo.class);
 
-        pane.set(0, 4, GuiFactory.displayableBuilder(ItemStack.class)
+        pane.fill(GuiFactory.displayableBuilder(ItemStack.class)
+                .itemStack(new ItemBuilder()
+                        .type(Item.getByNameOrId("minecraft:stained_glass_pane"))
+                        .damage(14)
+                        .name(" ").build()).build());
+
+        pane.set(4, 0, GuiFactory.displayableBuilder(ItemStack.class)
                 .itemStack(new ItemBuilder()
                         .type(Items.BOOK)
                         .name(UtilChatColour.translateColourCodes('&', "&eInfo"))
@@ -38,7 +45,12 @@ public class BingoCardUI {
 
         attribute.display(pane);
 
-        GuiFactory.guiBuilder().addPane(pane).title("Bingo Card")
+        GuiFactory.guiBuilder()
+                .addPane(pane)
+                .height(6)
+                .title("Bingo Card")
+                .setPlayerManager(ReforgedBingo.getInstance().getPlayerManager())
+                .setCloseConsumer(envyPlayer -> {})
                 .build().open(player);
     }
 

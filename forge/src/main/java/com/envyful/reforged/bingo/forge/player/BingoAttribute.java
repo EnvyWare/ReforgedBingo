@@ -132,4 +132,8 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
         return true;
     }
+
+    public long getTimeRemaining() {
+        return (24 - TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - this.started));
+    }
 }

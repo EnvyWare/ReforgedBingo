@@ -6,6 +6,7 @@ import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
+import com.envyful.reforged.bingo.forge.command.BingoCardCommand;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoLocaleConfig;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
@@ -15,6 +16,8 @@ import com.envyful.reforged.bingo.forge.player.BingoAttribute;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -70,6 +73,11 @@ public class ReforgedBingo {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Mod.EventHandler
+    public void onServerStart(FMLServerStartingEvent event) {
+        this.commandFactory.registerCommand(event.getServer(), new BingoCardCommand());
     }
 
     public static ReforgedBingo getInstance() {

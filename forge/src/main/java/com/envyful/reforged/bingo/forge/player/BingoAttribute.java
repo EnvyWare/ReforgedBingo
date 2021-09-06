@@ -1,5 +1,6 @@
 package com.envyful.reforged.bingo.forge.player;
 
+import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
@@ -91,7 +92,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
         this.started = System.currentTimeMillis();
 
-        this.parent.message(this.manager.getLocale().getCardReset());
+        this.parent.message(UtilChatColour.translateColourCodes('&', this.manager.getLocale().getCardReset()));
     }
 
     private boolean canPickPokemon(EnumSpecies value) {

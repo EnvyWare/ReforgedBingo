@@ -1,5 +1,6 @@
 package com.envyful.reforged.bingo.forge.listener;
 
+import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.listener.LazyListener;
 import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.math.UtilRandom;
@@ -43,7 +44,7 @@ public class BingoCardCompleteListener extends LazyListener {
         }
 
         for (String message : messages) {
-            event.getPlayer().message(message);
+            event.getPlayer().message(UtilChatColour.translateColourCodes('&', message));
         }
     }
 }

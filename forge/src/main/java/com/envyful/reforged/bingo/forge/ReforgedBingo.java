@@ -5,10 +5,13 @@ import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoLocaleConfig;
+import com.envyful.reforged.bingo.forge.player.BingoAttribute;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Mod(
         modid = "reforgedbingo",
@@ -33,6 +36,7 @@ public class ReforgedBingo {
         instance = this;
 
         this.reloadConfig();
+        this.playerManager.registerAttribute(this, BingoAttribute.class);
 
     }
 
@@ -59,5 +63,19 @@ public class ReforgedBingo {
 
     public BingoLocaleConfig getLocale() {
         return this.locale;
+    }
+
+    public boolean isBlacklisted(EnumSpecies pokemon) {
+        if (pokemon.isLegendary() || pokemon.isUltraBeast()) {
+            return true;
+        }
+
+        for (EnumSpecies blacklistedSpawn : this.getConfig().getBlacklistedSpawns()) {
+            if (Objects.equals(blacklistedSpawn, pokemon)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

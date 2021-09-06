@@ -21,9 +21,9 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> blacklistedSpawns = Lists.newArrayList();
     private transient List<EnumSpecies> blacklistedSpawnsCache = null;
 
-    private List<String> slotCompleteRewards = Lists.newArrayList();
-    private List<String> lineCompleteRewards = Lists.newArrayList();
-    private List<String> cardCompleteRewards = Lists.newArrayList();
+    private List<String> slotCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 1");
+    private List<String> lineCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 5");
+    private List<String> cardCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 10");
 
     public BingoConfig() {
         super();

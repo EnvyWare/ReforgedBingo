@@ -3,6 +3,7 @@ package com.envyful.reforged.bingo.forge.command;
 import com.envyful.api.command.annotate.Command;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Sender;
+import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.player.EnvyPlayer;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
@@ -26,6 +27,8 @@ public class BingoCardCommand {
         BingoCardUI.open(sender);
         BingoAttribute attribute = sender.getAttribute(ReforgedBingo.class);
 
-        sender.message("§e§l(!) §eYou have §b" + attribute.getTimeRemaining() + "§e hours left to complete your Bingo card!");
+        sender.message(UtilChatColour.translateColourCodes('&',
+                ReforgedBingo.getInstance().getLocale().getRemainingTimeMessage()
+                        .replace("%hours%", attribute.getTimeRemaining() + "")));
     }
 }

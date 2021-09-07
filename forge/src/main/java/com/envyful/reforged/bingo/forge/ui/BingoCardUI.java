@@ -1,5 +1,6 @@
 package com.envyful.reforged.bingo.forge.ui;
 
+import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.gui.factory.GuiFactory;
@@ -26,6 +27,18 @@ public class BingoCardUI {
                 .build();
         BingoAttribute attribute = player.getAttribute(ReforgedBingo.class);
 
+        for (ConfigItem fillerItem : ReforgedBingo.getInstance().getConfig().getConfigInterface().getFillerItems()) {
+            pane.add(GuiFactory.displayableBuilder(ItemStack.class)
+                    .itemStack(new ItemBuilder()
+                            .type(Item.getByNameOrId(fillerItem.getType()))
+                            .amount(fillerItem.getAmount())
+                            .damage(fillerItem.getDamage())
+                            .lore(fillerItem.getLore())
+                            .name(fillerItem.getName())
+                            .build())
+                    .build());
+        }
+
         pane.fill(GuiFactory.displayableBuilder(ItemStack.class)
                 .itemStack(new ItemBuilder()
                         .type(Item.getByNameOrId("minecraft:stained_glass_pane"))
@@ -48,7 +61,8 @@ public class BingoCardUI {
         GuiFactory.guiBuilder()
                 .addPane(pane)
                 .height(6)
-                .title("Bingo Card")
+                .title(UtilChatColour.translateColourCodes('&',
+                        ReforgedBingo.getInstance().getConfig().getConfigInterface().getTitle()))
                 .setPlayerManager(ReforgedBingo.getInstance().getPlayerManager())
                 .setCloseConsumer(envyPlayer -> {})
                 .build().open(player);

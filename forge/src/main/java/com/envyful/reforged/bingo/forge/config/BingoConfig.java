@@ -1,6 +1,7 @@
 package com.envyful.reforged.bingo.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
+import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.google.common.collect.Lists;
@@ -16,6 +17,8 @@ public class BingoConfig extends AbstractYamlConfig {
     private SQLDatabaseDetails database = new SQLDatabaseDetails("Bingo", "0.0.0.0", 3306,
             "admin", "password", "reforged");
 
+    private ConfigInterface configInterface = new ConfigInterface();
+
     private int maximumEvolution = 1;
 
     private List<String> blacklistedSpawns = Lists.newArrayList();
@@ -27,6 +30,10 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public BingoConfig() {
         super();
+    }
+
+    public ConfigInterface getConfigInterface() {
+        return this.configInterface;
     }
 
     public SQLDatabaseDetails getDatabase() {

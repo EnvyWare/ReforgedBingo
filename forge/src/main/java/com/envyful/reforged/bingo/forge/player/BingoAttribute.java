@@ -152,7 +152,8 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                 .itemStack(new ItemBuilder()
                         .type(Item.getByNameOrId("minecraft:stained_glass_pane"))
                         .damage(5)
-                        .name("§a§lCOMPLETE")
+                        .name(UtilChatColour.translateColourCodes('&',
+                                ReforgedBingo.getInstance().getLocale().getCompleteSlotName()))
                         .build()).build();
 
         for (int y = 0; y < 4; y++) {

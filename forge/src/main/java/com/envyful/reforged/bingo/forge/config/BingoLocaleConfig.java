@@ -17,6 +17,11 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
     private String cardCompleteMessage = "&e&l(!) &eWell done, your entire bingo card!";
     private String remainingTimeMessage = "&e&l(!) &eYou have &b%hours%&e hours left to complete your card!";
 
+    private List<String> cardSlotLore = Lists.newArrayList(
+            "&7",
+            "&eClick me&7 for more information about this pokemon!"
+    );
+
     private List<String> helpInfo = Lists.newArrayList(
             "",
             "&eWhat is bingo?",
@@ -38,6 +43,10 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     public BingoLocaleConfig() {
         super();
+    }
+
+    public List<String> getCardSlotLore() {
+        return this.cardSlotLore;
     }
 
     public String getCardReset() {

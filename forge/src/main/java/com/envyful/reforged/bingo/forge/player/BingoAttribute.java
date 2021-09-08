@@ -13,6 +13,7 @@ import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
+import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
@@ -163,14 +164,17 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
                 CardSlot cardSlot = this.bingoCard[y][x];
 
+                List<String> lore = Lists.newArrayList();
+
+                for (String s : ReforgedBingo.getInstance().getLocale().getCardSlotLore()) {
+                    lore.add(UtilChatColour.translateColourCodes('&', s));
+                }
+
                 pane.set(1 + x, 1 + y,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
                                         .name("§b" + cardSlot.getSpecies().getLocalizedName())
-                                        .lore(Arrays.asList(
-                                                "§7",
-                                                "§eClick me§7 for more information about this pokemon!"
-                                        )).build())
+                                        .lore(lore).build())
                                 .clickHandler((envyPlayer, clickType) ->
                                         envyPlayer.executeCommand("pwiki " + cardSlot.getSpecies().getPokemonName()))
                                 .build());

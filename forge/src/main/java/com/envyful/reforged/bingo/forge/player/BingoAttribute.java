@@ -175,8 +175,12 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
                                         .name("§b" + cardSlot.getSpecies().getLocalizedName())
                                         .lore(lore).build())
-                                .clickHandler((envyPlayer, clickType) ->
-                                        envyPlayer.executeCommand("pwiki " + cardSlot.getSpecies().getPokemonName()))
+                                .clickHandler((envyPlayer, clickType) -> {
+                                    for (String cardSlotCommand : ReforgedBingo.getInstance().getConfig().getCardSlotCommands()) {
+                                        envyPlayer.executeCommand(cardSlotCommand.replace("%pokemon%",
+                                                cardSlot.getSpecies().name));
+                                    }
+                                })
                                 .build());
             }
         }

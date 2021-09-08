@@ -27,9 +27,14 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> slotCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 1");
     private List<String> lineCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 5");
     private List<String> cardCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 10");
+    private List<String> cardSlotCommands = Lists.newArrayList("pwiki %pokemon%");
 
     public BingoConfig() {
         super();
+    }
+
+    public List<String> getCardSlotCommands() {
+        return this.cardSlotCommands;
     }
 
     public ConfigInterface getConfigInterface() {

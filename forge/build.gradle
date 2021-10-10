@@ -37,20 +37,13 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-    compileOnly ('com.pixelmonmod.pixelmon:Pixelmon-1.12.2-8.2.0-server:1.0')
+    compileOnly ('com.pixelmonmod.pixelmon:Pixelmon-1.12.2-8.3.0-server:1.0')
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 
-    shadow group: 'com.github.Pixelmon-Development.API', name: 'commons', version: '0.3.7'
-    shadow group: 'com.github.Pixelmon-Development.API', name: 'forge', version: '0.3.7'
-    shadow group: 'com.github.Pixelmon-Development.API', name: 'reforged', version: '0.3.7'
-
-    shadow (group: 'com.github.Pixelmon-Development.bStats-Metrics', name: 'bstats-base', version: '2.2.8') {
-        transitive = false
-    }
-    shadow (group: 'com.github.Pixelmon-Development.bStats-Metrics', name: 'bstats-forge', version: '2.2.8') {
-        transitive = false
-    }
+    shadow group: 'com.github.Pixelmon-Development.API', name: 'commons', version: '0.8.5'
+    shadow group: 'com.github.Pixelmon-Development.API', name: 'forge', version: '0.8.5'
+    shadow group: 'com.github.Pixelmon-Development.API', name: 'reforged', version: '0.8.5'
 }
 
 shadowJar {

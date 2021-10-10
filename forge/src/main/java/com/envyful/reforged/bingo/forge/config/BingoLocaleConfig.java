@@ -16,38 +16,14 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
     private String lineCompleteMessage = "&e&l(!) &eWell done, you just completed a line on your bingo card!";
     private String cardCompleteMessage = "&e&l(!) &eWell done, your entire bingo card!";
     private String remainingTimeMessage = "&e&l(!) &eYou have &b%hours%&e hours left to complete your card!";
-    private String completeSlotName = "&a&lCOMPLETE";
 
     private List<String> cardSlotLore = Lists.newArrayList(
             "&7",
             "&eClick me&7 for more information about this pokemon!"
     );
 
-    private List<String> helpInfo = Lists.newArrayList(
-            "",
-            "&eWhat is bingo?",
-            "&7Each day you will get a new set of 27 pokemon",
-            "&7on your bingo card that you must find and catch",
-            "&7in order to receive the bingo card's rewards.",
-            "",
-            "&eWhat are the rewards?",
-            "&7For each pokemon you complete on the bingo card",
-            "&7you will receive a random reward. Then for each",
-            "&7line of the bingo card you complete you'll get",
-            "&7another random reward. Finally, if you complete",
-            "&7the entire bingo card you will receive yet another",
-            "&7random, but better, reward.",
-            "",
-            "&eWhat if I have two of the same pokemon?",
-            "&7You simply just have to find and catch that pokemon twice."
-    );
-
     public BingoLocaleConfig() {
         super();
-    }
-
-    public String getCompleteSlotName() {
-        return this.completeSlotName;
     }
 
     public List<String> getCardSlotLore() {
@@ -72,9 +48,5 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     public String getRemainingTimeMessage() {
         return this.remainingTimeMessage;
-    }
-
-    public List<String> getHelpInfo() {
-        return this.helpInfo;
     }
 }

@@ -1,6 +1,7 @@
 package com.envyful.reforged.bingo.forge.player;
 
 import com.envyful.api.forge.chat.UtilChatColour;
+import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
@@ -149,12 +150,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     public void display(Pane pane) {
         Displayable complete = GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(new ItemBuilder()
-                        .type(Item.getByNameOrId("minecraft:stained_glass_pane"))
-                        .damage(5)
-                        .name(UtilChatColour.translateColourCodes('&',
-                                ReforgedBingo.getInstance().getLocale().getCompleteSlotName()))
-                        .build()).build();
+                .itemStack(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
 
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 7; x++) {
@@ -174,8 +170,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                 pane.set(1 + x, 1 + y,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
-                                        .name("§b" + cardSlot.getSpecies().getLocalizedName())
-                                        .lore(lore).build())
+                                        .addLore(lore.toArray(new String[0])).build())
                                 .clickHandler((envyPlayer, clickType) -> {
                                     for (String cardSlotCommand : ReforgedBingo.getInstance().getConfig().getCardSlotCommands()) {
                                         envyPlayer.executeCommand(cardSlotCommand.replace("%pokemon%",

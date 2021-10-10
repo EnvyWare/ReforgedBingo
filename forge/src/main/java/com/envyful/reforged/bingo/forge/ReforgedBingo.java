@@ -68,13 +68,6 @@ public class ReforgedBingo {
                 e.printStackTrace();
             }
         });
-
-        new ForgeTaskBuilder()
-                .async(true)
-                .delay(10L)
-                .interval(10L)
-                .task(new CardResetTask(this))
-                .start();
     }
 
     public void reloadConfig() {

@@ -173,8 +173,10 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                                         .addLore(lore.toArray(new String[0])).build())
                                 .clickHandler((envyPlayer, clickType) -> {
                                     for (String cardSlotCommand : ReforgedBingo.getInstance().getConfig().getCardSlotCommands()) {
-                                        envyPlayer.executeCommand(cardSlotCommand.replace("%pokemon%",
-                                                cardSlot.getSpecies().name));
+                                        envyPlayer.executeCommand(cardSlotCommand.replace(
+                                                "%pokemon%",
+                                                cardSlot.getSpecies().getLocalizedName()
+                                        ));
                                     }
                                 })
                                 .build());

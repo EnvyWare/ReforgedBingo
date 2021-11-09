@@ -26,6 +26,7 @@ public class BingoConfig extends AbstractYamlConfig {
             new ConfigItem("minecraft:stained_glass_pane", 1, (byte) 15,  " ", Lists.newArrayList(), Maps.newHashMap()))));
 
     private int maximumEvolution = 1;
+    private long cardDurationSeconds = 86400;
 
     private List<String> blacklistedSpawns = Lists.newArrayList();
     private transient List<EnumSpecies> blacklistedSpawnsCache = null;
@@ -113,5 +114,9 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public ConfigItem getCompleteItem() {
         return this.completeItem;
+    }
+
+    public long getCardDurationSeconds() {
+        return this.cardDurationSeconds;
     }
 }

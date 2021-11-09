@@ -72,7 +72,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     }
 
     public boolean checkCardExpiry() {
-        return (System.currentTimeMillis() - started) > TimeUnit.DAYS.toMillis(1);
+        return (System.currentTimeMillis() - started) > TimeUnit.SECONDS.toMillis(ReforgedBingo.getInstance().getConfig().getCardDurationSeconds());
     }
 
     public void generateNewCard() {
@@ -145,7 +145,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     }
 
     public long getTimeRemaining() {
-        return (24 - TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - this.started));
+        return (TimeUnit.SECONDS.toHours(ReforgedBingo.getInstance().getConfig().getCardDurationSeconds()) - TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - this.started));
     }
 
     public void display(Pane pane) {

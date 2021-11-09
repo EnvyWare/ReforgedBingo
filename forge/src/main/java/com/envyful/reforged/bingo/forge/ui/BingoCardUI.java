@@ -32,13 +32,7 @@ public class BingoCardUI {
                              .build());
         }
 
-        if (config.getHelpItem().isEnabled()) {
-            pane.set(config.getHelpItem().getXPos(), config.getHelpItem().getYPos(),
-                     GuiFactory.displayableBuilder(ItemStack.class)
-                             .itemStack(UtilConfigItem.fromConfigItem(config.getHelpItem()))
-                             .build()
-            );
-        }
+        UtilConfigItem.addConfigItem(pane, config.getHelpItem());
 
         attribute.display(pane);
 

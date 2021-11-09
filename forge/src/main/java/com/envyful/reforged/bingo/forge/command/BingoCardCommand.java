@@ -24,6 +24,11 @@ public class BingoCardCommand {
     @CommandProcessor
     public void run(@Sender EntityPlayerMP player, String[] args) {
         EnvyPlayer<EntityPlayerMP> sender = ReforgedBingo.getInstance().getPlayerManager().getPlayer(player);
+
+        if (sender == null) {
+            return;
+        }
+
         BingoCardUI.open(sender);
         BingoAttribute attribute = sender.getAttribute(ReforgedBingo.class);
 

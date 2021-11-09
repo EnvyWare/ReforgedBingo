@@ -21,6 +21,11 @@ public class PokemonCatchListener {
     @SubscribeEvent
     public void onBingoSlotComplete(CaptureEvent.SuccessfulCapture event) {
         EnvyPlayer<EntityPlayerMP> player = this.mod.getPlayerManager().getPlayer(event.player);
+
+        if (player == null) {
+            return;
+        }
+
         BingoAttribute attribute = player.getAttribute(ReforgedBingo.class);
 
         if (attribute == null) {

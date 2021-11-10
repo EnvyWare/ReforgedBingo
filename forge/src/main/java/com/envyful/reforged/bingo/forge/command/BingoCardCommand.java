@@ -21,7 +21,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
         }
 )
 @SubCommands({
-        ReloadCommand.class
+        ReloadCommand.class,
+        ReRollCommand.class
 })
 public class BingoCardCommand {
 

@@ -1,6 +1,7 @@
 package com.envyful.reforged.bingo.forge.command;
 
 import com.envyful.api.command.annotate.Command;
+import com.envyful.api.command.annotate.SubCommands;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.forge.chat.UtilChatColour;
@@ -19,6 +20,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
                 "bingoc"
         }
 )
+@SubCommands({
+        ReloadCommand.class
+})
 public class BingoCardCommand {
 
     @CommandProcessor

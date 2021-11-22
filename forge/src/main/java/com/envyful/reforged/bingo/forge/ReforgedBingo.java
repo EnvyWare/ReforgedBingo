@@ -32,11 +32,12 @@ import java.util.Objects;
         modid = "reforgedbingo",
         name = "Reforged Bingo Forge",
         version = ReforgedBingo.VERSION,
-        acceptableRemoteVersions = "*"
+        acceptableRemoteVersions = "*",
+        updateJSON = "https://ogn.pixelmonmod.com/update/sm-rb/update.json"
 )
 public class ReforgedBingo {
 
-    protected static final String VERSION = "0.9.0";
+    protected static final String VERSION = "0.9.1";
 
     private static ReforgedBingo instance;
 

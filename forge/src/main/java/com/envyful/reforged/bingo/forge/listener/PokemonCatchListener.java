@@ -34,4 +34,21 @@ public class PokemonCatchListener {
 
         attribute.catchPokemon(event.getPokemon().getSpecies());
     }
+
+    @SubscribeEvent
+    public void onRaidDenCapture(CaptureEvent.SuccessfulRaidCapture event) {
+        EnvyPlayer<EntityPlayerMP> player = this.mod.getPlayerManager().getPlayer(event.player);
+
+        if (player == null) {
+            return;
+        }
+
+        BingoAttribute attribute = player.getAttribute(ReforgedBingo.class);
+
+        if (attribute == null) {
+            return;
+        }
+
+        attribute.catchPokemon(event.getRaidPokemon().getSpecies());
+    }
 }

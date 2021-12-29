@@ -30,14 +30,20 @@ repositories {
 
     maven { url 'https://jitpack.io' }
 
-    flatDir {
-        dirs '../Libraries/'
+    ivy {
+        setUrl('https://download.nodecdn.net/containers/reforged/server/release')
+        metadataSources {
+            artifact()
+        }
+        patternLayout {
+            artifact('[revision]/[artifact].[ext]')
+        }
     }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-    compileOnly ('com.pixelmonmod.pixelmon:Pixelmon-1.12.2-8.3.3-server:1.0')
+    compileOnly 'pixelmon:Pixelmon-1.12.2-8.3.6-server:8.3.6'
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 

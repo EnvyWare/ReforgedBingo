@@ -16,7 +16,6 @@ import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 

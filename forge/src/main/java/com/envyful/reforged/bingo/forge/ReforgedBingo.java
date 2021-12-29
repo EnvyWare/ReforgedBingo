@@ -37,7 +37,7 @@ import java.util.Objects;
 )
 public class ReforgedBingo {
 
-    protected static final String VERSION = "1.0.0";
+    protected static final String VERSION = "1.0.1";
 
     private static ReforgedBingo instance;
 
@@ -116,13 +116,6 @@ public class ReforgedBingo {
         if (pokemon.isLegendary() || pokemon.isUltraBeast()) {
             return true;
         }
-
-        for (EnumSpecies blacklistedSpawn : this.getConfig().getBlacklistedSpawns()) {
-            if (Objects.equals(blacklistedSpawn, pokemon)) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.getConfig().getBlacklistedSpawns().contains(pokemon);
     }
 }

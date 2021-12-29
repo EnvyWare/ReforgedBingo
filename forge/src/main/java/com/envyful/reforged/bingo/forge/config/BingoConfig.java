@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.util.EnumSet;
 import java.util.List;
 
 @ConfigPath("config/ReforgedBingo/config.yml")
@@ -28,8 +29,12 @@ public class BingoConfig extends AbstractYamlConfig {
     private int maximumEvolution = 1;
     private long cardDurationSeconds = 86400;
 
+    /**
+     * This is a really weird way to go about it, why no serializer implementation to just support Enums?
+     * Would be nice if this API actually exposed a way to add onto the ConfigurationOptions.
+     */
     private List<String> blacklistedSpawns = Lists.newArrayList();
-    private transient List<EnumSpecies> blacklistedSpawnsCache = null;
+    private transient EnumSet<EnumSpecies> blacklistedSpawnsCache = null;
 
     private List<String> slotCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 1");
     private List<String> lineCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 5");
@@ -60,8 +65,30 @@ public class BingoConfig extends AbstractYamlConfig {
             "&7You simply just have to find and catch that pokemon twice."
     ), 4, 0, Maps.newHashMap());
 
+    // I'd add comments, but they don't seem to deserialize :D
+    private boolean acceptCatching = true;
+    private boolean acceptRaidCatching = true;
+    private boolean acceptFossilReviving = false;
+    private boolean acceptEggHatch = false;
+
     public BingoConfig() {
         super();
+    }
+
+    public boolean acceptCatching() {
+        return this.acceptCatching;
+    }
+
+    public boolean acceptRaidCatching() {
+        return this.acceptRaidCatching;
+    }
+
+    public boolean acceptFossilReviving() {
+        return this.acceptFossilReviving;
+    }
+
+    public boolean acceptEggHatch() {
+        return this.acceptEggHatch;
     }
 
     public List<String> getCardSlotCommands() {
@@ -80,9 +107,9 @@ public class BingoConfig extends AbstractYamlConfig {
         return this.maximumEvolution;
     }
 
-    public List<EnumSpecies> getBlacklistedSpawns() {
+    public EnumSet<EnumSpecies> getBlacklistedSpawns() {
         if (this.blacklistedSpawnsCache == null) {
-            this.blacklistedSpawnsCache = Lists.newArrayList();
+            this.blacklistedSpawnsCache = EnumSet.noneOf(EnumSpecies.class);
 
             for (String blacklistedSpawn : this.blacklistedSpawns) {
                 EnumSpecies species = EnumSpecies.getFromNameAnyCase(blacklistedSpawn);
@@ -90,6 +117,12 @@ public class BingoConfig extends AbstractYamlConfig {
                 if (species != null) {
                     this.blacklistedSpawnsCache.add(species);
                 }
+
+                // Maybe consider adding MissingNo as a default attribute or just hardcode it being blacklisted?
+                /*
+                if (!this.blacklistedSpawnsCache.contains(EnumSpecies.MissingNo))
+                    this.blacklistedSpawnsCache.add(EnumSpecies.MissingNo);
+                 */
             }
         }
 

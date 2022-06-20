@@ -37,7 +37,7 @@ import java.util.Objects;
 )
 public class ReforgedBingo {
 
-    protected static final String VERSION = "2.0.0";
+    protected static final String VERSION = "2.0.1";
 
     private static ReforgedBingo instance;
 

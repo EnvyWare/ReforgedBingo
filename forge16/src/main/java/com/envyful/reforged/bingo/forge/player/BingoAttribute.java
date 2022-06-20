@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
@@ -34,6 +35,10 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     public BingoAttribute(ReforgedBingo manager, EnvyPlayer<?> parent) {
         super(manager, (ForgeEnvyPlayer) parent);
+    }
+
+    public BingoAttribute(UUID uuid) {
+        super(uuid);
     }
 
     @Override

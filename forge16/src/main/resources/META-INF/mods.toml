@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="MIT"
+issueTrackerURL="https://github.com/EnvyWare/ReforgedBingo/issues"
+
+[[mods]]
+modId="reforgedbingo"
+version="2.0.0"
+displayName="Reforged Bingo Forge"
+displayURL="https://github.com/EnvyWare"
+credits="https://github.com/EnvyWare"
+authors="https://github.com/EnvyWare"
+updateJSONURL="https://ogn.pixelmonmod.com/update/sm-ph/update.json"
+description='''
+Adds Bingo
+'''
+
+[[dependencies.reforgedbingo]]
+modId="forge"
+mandatory=true
+versionRange="[36,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.reforgedbingo]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.16.5,1.17)"
+ordering="NONE"
+side="BOTH"

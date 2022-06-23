@@ -1,19 +1,20 @@
 package com.envyful.reforged.bingo.forge.player;
 
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
+import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 
 public class CardSlot {
 
-    private final Species species;
+    private final int species;
     private boolean complete;
 
     public CardSlot(Species species, boolean complete) {
-        this.species = species;
+        this.species = species.getDex();
         this.complete = complete;
     }
 
     public Species getSpecies() {
-        return this.species;
+        return PixelmonSpecies.fromDex(this.species).orElse(null);
     }
 
     public boolean isComplete() {

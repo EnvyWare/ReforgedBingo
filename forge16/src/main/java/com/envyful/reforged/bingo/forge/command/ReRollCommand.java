@@ -41,11 +41,9 @@ public class ReRollCommand {
         }
 
         attribute.generateNewCard();
-        sender.sendMessage(new StringTextComponent(UtilChatColour.translateColourCodes(
-                '&',
+        sender.sendMessage(UtilChatColour.colour(
                 ReforgedBingo.getInstance().getLocale().getRerollCardMessage()
                         .replace("%player%", target.getName().getString())
-        )), Util.NIL_UUID);
+        ), Util.NIL_UUID);
     }
-
 }

@@ -2,6 +2,7 @@ package com.envyful.reforged.bingo.forge.ui;
 
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
+import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
@@ -26,11 +27,7 @@ public class BingoCardUI {
 
         BingoAttribute attribute = player.getAttribute(ReforgedBingo.class);
 
-        for (ConfigItem fillerItem : config.getConfigInterface().getFillerItems()) {
-            pane.add(GuiFactory.displayableBuilder(ItemStack.class)
-                             .itemStack(UtilConfigItem.fromConfigItem(fillerItem))
-                             .build());
-        }
+        UtilConfigInterface.fillBackground(pane, config.getConfigInterface());
 
         UtilConfigItem.addConfigItem(pane, config.getHelpItem());
 
@@ -39,9 +36,8 @@ public class BingoCardUI {
         GuiFactory.guiBuilder()
                 .addPane(pane)
                 .height(6)
-                .title(UtilChatColour.translateColourCodes('&', config.getConfigInterface().getTitle()))
+                .title(UtilChatColour.colour(config.getConfigInterface().getTitle()))
                 .setPlayerManager(ReforgedBingo.getInstance().getPlayerManager())
-                .setCloseConsumer(envyPlayer -> {})
                 .build().open(player);
     }
 }

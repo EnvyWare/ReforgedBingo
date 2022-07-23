@@ -22,9 +22,8 @@ public class ReloadCommand {
     @CommandProcessor
     public void onCommand(@Sender ICommandSource sender, String[] args) {
         ReforgedBingo.getInstance().reloadConfig();
-        sender.sendMessage(new StringTextComponent(UtilChatColour.translateColourCodes(
-                '&',
+        sender.sendMessage(UtilChatColour.colour(
                 ReforgedBingo.getInstance().getLocale().getReloadMessage()
-        )), Util.NIL_UUID);
+        ), Util.NIL_UUID);
     }
 }

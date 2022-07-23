@@ -18,6 +18,7 @@ import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.sql.Connection;
@@ -154,8 +155,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     }
 
     public void display(Pane pane) {
-        Displayable complete = GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
+        Displayable complete = GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
 
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 7; x++) {
@@ -166,16 +166,19 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
                 CardSlot cardSlot = this.bingoCard[y][x];
 
-                List<String> lore = Lists.newArrayList();
+                List<ITextComponent> lore = Lists.newArrayList();
 
                 for (String s : ReforgedBingo.getInstance().getLocale().getCardSlotLore()) {
-                    lore.add(UtilChatColour.translateColourCodes('&', s));
+                    lore.add(UtilChatColour.colour(s));
                 }
 
                 pane.set(1 + x, 1 + y,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
-                                        .addLore(lore.toArray(new String[0])).build())
+                                        .addLore(lore.toArray(new ITextComponent[0]))
+                                        .name(cardSlot.getSpecies().getLocalizedName())
+                                        .build())
+                                .asyncClick(false)
                                 .clickHandler((envyPlayer, clickType) -> {
                                     for (String cardSlotCommand : ReforgedBingo.getInstance().getConfig().getCardSlotCommands()) {
                                         envyPlayer.executeCommand(cardSlotCommand.replace(

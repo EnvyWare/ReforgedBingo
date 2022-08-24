@@ -3,7 +3,7 @@ package com.envyful.reforged.bingo.forge.config;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
-import com.envyful.api.config.type.PositionableConfigItem;
+import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.google.common.collect.ImmutableMap;
@@ -42,7 +42,7 @@ public class BingoConfig extends AbstractYamlConfig {
             "minecraft:stained_glass_pane", 1, (byte) 5, "&a&lCOMPLETE", Lists.newArrayList(), Maps.newHashMap()
     );
 
-    private PositionableConfigItem helpItem = new PositionableConfigItem(
+    private ExtendedConfigItem helpItem = new ExtendedConfigItem(
             "minecraft:book", 1, (byte) 0, "&eInfo", Lists.newArrayList(
             "",
             "&eWhat is bingo?",
@@ -114,7 +114,7 @@ public class BingoConfig extends AbstractYamlConfig {
         return this.columnCompleteRewards;
     }
 
-    public PositionableConfigItem getHelpItem() {
+    public ExtendedConfigItem getHelpItem() {
         return this.helpItem;
     }
 

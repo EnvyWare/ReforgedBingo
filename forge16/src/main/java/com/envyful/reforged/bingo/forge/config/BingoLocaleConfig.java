@@ -15,6 +15,7 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
     private String slotCompleteMessage = "&e&l(!) &eWell done, you just completed a slot on your bingo card!";
     private String lineCompleteMessage = "&e&l(!) &eWell done, you just completed a line on your bingo card!";
     private String cardCompleteMessage = "&e&l(!) &eWell done, your entire bingo card!";
+    private String columnCompleteMessage = "&e&l(!) &eWell done, your column complete.";
     private String remainingTimeMessage = "&e&l(!) &eYou have &b%hours%&e hours left to complete your card!";
 
     private String reloadMessage = "&e&l(!) &eReloaded configs";
@@ -59,5 +60,9 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     public String getRerollCardMessage() {
         return this.rerollCardMessage;
+    }
+
+    public String getColumnCompleteMessage() {
+        return this.columnCompleteMessage;
     }
 }

@@ -113,14 +113,16 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     public void catchPokemon(Species species) {
         for (CardSlot[] cardSlots : this.bingoCard) {
-            for (CardSlot cardSlot : cardSlots) {
+            for (int i = 0; i < cardSlots.length; i++) {
+                CardSlot cardSlot = cardSlots[i];
                 if (cardSlot.getSpecies() == species && !cardSlot.isComplete()) {
                     cardSlot.setComplete(true);
 
                     boolean rowComplete = this.checkRowCompletion(cardSlots);
                     boolean cardComplete = this.checkCardCompletion();
+                    boolean columnComplete = this.checkColumnCompletion(i);
                     BingoSlotCompleteEvent completeEvent = new BingoSlotCompleteEvent(this.parent,
-                            this, rowComplete, cardComplete);
+                            this, rowComplete, cardComplete, columnComplete);
                     MinecraftForge.EVENT_BUS.post(completeEvent);
                     return;
                 }
@@ -144,6 +146,16 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                 if (!cardSlot.isComplete()) {
                     return false;
                 }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkColumnCompletion(int column) {
+        for (CardSlot[] cardSlots : this.bingoCard) {
+            if (!cardSlots[column].isComplete()) {
+                return false;
             }
         }
 

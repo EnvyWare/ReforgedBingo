@@ -12,17 +12,19 @@ public class BingoSlotCompleteEvent extends Event {
 
     private boolean lineComplete;
     private boolean cardComplete;
+    private boolean columnComplete;
 
     public BingoSlotCompleteEvent(EnvyPlayer<ServerPlayerEntity> player, BingoAttribute attribute) {
-        this(player, attribute, false, false);
+        this(player, attribute, false, false, false);
     }
 
     public BingoSlotCompleteEvent(EnvyPlayer<ServerPlayerEntity> player, BingoAttribute attribute,
-                                  boolean lineComplete, boolean cardComplete) {
+                                  boolean lineComplete, boolean cardComplete, boolean columnComplete) {
         this.player = player;
         this.attribute = attribute;
         this.lineComplete = lineComplete;
         this.cardComplete = cardComplete;
+        this.columnComplete = columnComplete;
     }
 
     public EnvyPlayer<ServerPlayerEntity> getPlayer() {
@@ -47,5 +49,13 @@ public class BingoSlotCompleteEvent extends Event {
 
     public void setCardComplete(boolean cardComplete) {
         this.cardComplete = cardComplete;
+    }
+
+    public boolean isColumnComplete() {
+        return this.columnComplete;
+    }
+
+    public void setColumnComplete(boolean columnComplete) {
+        this.columnComplete = columnComplete;
     }
 }

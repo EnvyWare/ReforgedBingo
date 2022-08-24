@@ -36,6 +36,7 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> lineCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 5");
     private List<String> cardCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 10");
     private List<String> cardSlotCommands = Lists.newArrayList("pwiki %pokemon%");
+    private List<String> columnCompleteRewards = Lists.newArrayList("give %player% stone{display:{Name:'[{\"text\":\"SmellyHacko\",\"italic\":false}]'}} 1");
 
     private ConfigItem completeItem = new ConfigItem(
             "minecraft:stained_glass_pane", 1, (byte) 5, "&a&lCOMPLETE", Lists.newArrayList(), Maps.newHashMap()
@@ -107,6 +108,10 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public List<String> getCardCompleteRewards() {
         return this.cardCompleteRewards;
+    }
+
+    public List<String> getColumnCompleteRewards() {
+        return this.columnCompleteRewards;
     }
 
     public PositionableConfigItem getHelpItem() {

@@ -39,6 +39,11 @@ public class BingoCardCompleteListener extends LazyListener {
             messages.add(this.mod.getLocale().getCardCompleteMessage());
         }
 
+        if (event.isColumnComplete()) {
+            commands.add(UtilRandom.getRandomElement(this.mod.getConfig().getColumnCompleteRewards()));
+            messages.add(this.mod.getLocale().getColumnCompleteMessage());
+        }
+
         for (String command : commands) {
             UtilForgeServer.executeCommand(command.replace("%player%", event.getPlayer().getParent().getName().getString()));
         }

@@ -26,7 +26,7 @@ public class BingoConfig extends AbstractYamlConfig {
 
     private ConfigInterface configInterface = new ConfigInterface("Bingo", 6, "BLOCK", Maps.newHashMap(ImmutableMap.of(
             "one",
-            new ConfigItem("minecraft:stained_glass_pane", 1, (byte) 15,  " ", Lists.newArrayList(), Maps.newHashMap()))));
+            new ConfigItem("minecraft:black_stained_glass_pane", 1, (byte) 15,  " ", Lists.newArrayList(), Maps.newHashMap()))));
 
     private int maximumEvolution = 1;
     private long cardDurationSeconds = 86400;
@@ -41,7 +41,7 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> columnCompleteRewards = Lists.newArrayList("give %player% stone{display:{Name:'[{\"text\":\"SmellyHacko\",\"italic\":false}]'}} 1");
 
     private ConfigItem completeItem = new ConfigItem(
-            "minecraft:stained_glass_pane", 1, (byte) 5, "&a&lCOMPLETE", Lists.newArrayList(), Maps.newHashMap()
+            "minecraft:lime_stained_glass_pane", 1, (byte) 5, "&a&lCOMPLETE", Lists.newArrayList(), Maps.newHashMap()
     );
 
     private ExtendedConfigItem helpItem = new ExtendedConfigItem(

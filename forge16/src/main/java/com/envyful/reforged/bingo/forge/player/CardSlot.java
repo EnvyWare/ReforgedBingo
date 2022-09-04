@@ -5,7 +5,7 @@ import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 
 public class CardSlot {
 
-    private final int species;
+    private int species;
     private boolean complete;
 
     public CardSlot(Species species, boolean complete) {

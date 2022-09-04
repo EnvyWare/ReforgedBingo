@@ -6,6 +6,7 @@ import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.player.SaveMode;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,6 +20,7 @@ import java.util.List;
 @ConfigSerializable
 public class BingoConfig extends AbstractYamlConfig {
 
+    private SaveMode saveMode = SaveMode.JSON;
     private SQLDatabaseDetails database = new SQLDatabaseDetails("Bingo", "0.0.0.0", 3306,
             "admin", "password", "reforged");
 
@@ -64,6 +66,10 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public BingoConfig() {
         super();
+    }
+
+    public SaveMode getSaveMode() {
+        return this.saveMode;
     }
 
     public List<String> getCardSlotCommands() {

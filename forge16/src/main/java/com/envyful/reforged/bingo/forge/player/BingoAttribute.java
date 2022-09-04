@@ -10,6 +10,7 @@ import com.envyful.api.gui.item.Displayable;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+@DataDirectory("config/players/ReforgedBingo/")
 public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     private long started;

@@ -1,6 +1,7 @@
 package com.envyful.reforged.bingo.forge;
 
 import com.envyful.api.concurrency.UtilConcurrency;
+import com.envyful.api.concurrency.UtilLogger;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
@@ -9,6 +10,8 @@ import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
+import com.envyful.api.player.SaveMode;
+import com.envyful.api.player.save.impl.JsonSaveManager;
 import com.envyful.reforged.bingo.forge.command.BingoCardCommand;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoLocaleConfig;
@@ -23,6 +26,8 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -41,8 +46,10 @@ public class ReforgedBingo {
     private BingoConfig config;
     private BingoLocaleConfig locale;
     private Database database;
+    private Logger logger = LogManager.getLogger("reforgedbingo");
 
     public ReforgedBingo() {
+        UtilLogger.setLogger(this.logger);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -52,21 +59,28 @@ public class ReforgedBingo {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         this.reloadConfig();
+
+        if (this.config.getSaveMode() == SaveMode.JSON) {
+            this.playerManager.setSaveManager(new JsonSaveManager<>());
+        }
+
         this.playerManager.registerAttribute(this, BingoAttribute.class);
 
         new BingoCardCompleteListener(this);
         new PokemonCatchListener(this);
 
-        UtilConcurrency.runAsync(() -> {
-            this.database = new SimpleHikariDatabase(this.config.getDatabase());
+        if (this.config.getSaveMode() == SaveMode.MYSQL) {
+            UtilConcurrency.runAsync(() -> {
+                this.database = new SimpleHikariDatabase(this.config.getDatabase());
 
-            try (Connection connection = this.database.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE)) {
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+                try (Connection connection = this.database.getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE)) {
+                    preparedStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
 
         new ForgeTaskBuilder()
                 .async(true)

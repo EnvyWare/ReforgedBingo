@@ -74,8 +74,10 @@ public class ReforgedBingo {
                 this.database = new SimpleHikariDatabase(this.config.getDatabase());
 
                 try (Connection connection = this.database.getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE)) {
+                     PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE);
+                     PreparedStatement alterStatement = connection.prepareStatement(BingoQueries.ALTER_TABLE)) {
                     preparedStatement.executeUpdate();
+                    alterStatement.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

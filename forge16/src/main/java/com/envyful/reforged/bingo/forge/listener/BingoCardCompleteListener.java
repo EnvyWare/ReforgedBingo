@@ -26,6 +26,8 @@ public class BingoCardCompleteListener extends LazyListener {
         List<String> commands = Lists.newArrayList();
         List<String> messages = Lists.newArrayList();
 
+        event.getAttribute().setCompleted(event.getAttribute().getCompleted() + 1);
+
         commands.add(UtilRandom.getRandomElement(this.mod.getConfig().getSlotCompleteRewards()));
         messages.add(this.mod.getLocale().getSlotCompleteMessage());
 

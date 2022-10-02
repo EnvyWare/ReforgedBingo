@@ -35,6 +35,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     private long started;
     private CardSlot[][] bingoCard;
+    private int completed = 0;
 
     public BingoAttribute(ReforgedBingo manager, EnvyPlayer<?> parent) {
         super(manager, (ForgeEnvyPlayer) parent);
@@ -42,6 +43,14 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
     public BingoAttribute(UUID uuid) {
         super(uuid);
+    }
+
+    public int getCompleted() {
+        return this.completed;
+    }
+
+    public void setCompleted(int completed) {
+        this.completed = completed;
     }
 
     @Override
@@ -59,6 +68,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
             this.started = resultSet.getLong("timeStarted");
             this.bingoCard = UtilGson.GSON.fromJson(resultSet.getString("card"), CardSlot[][].class);
+            this.completed = resultSet.getInt("completedCards");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -72,6 +82,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
             preparedStatement.setString(1, this.parent.getUuid().toString());
             preparedStatement.setString(2, UtilGson.GSON.toJson(this.bingoCard));
             preparedStatement.setLong(3, this.started);
+            preparedStatement.setInt(4, this.completed);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

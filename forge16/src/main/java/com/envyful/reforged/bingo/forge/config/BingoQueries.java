@@ -7,13 +7,16 @@ public class BingoQueries {
             "uuid           VARCHAR(64)     NOT NULL, " +
             "card           BLOB            NOT NULL, " +
             "timeStarted    BIGINT          UNSIGNED        NOT NULL, " +
+            "completedCards INT             UNSIGNED        NOT NULL, " +
             "UNIQUE(uuid), " +
             "PRIMARY KEY(id)" +
             ");";
 
-    public static final String LOAD_PLAYER_BINGO_CARD = "SELECT card, timeStarted FROM `reforged_bingo_cards` WHERE uuid = ?;";
+    public static final String ALTER_TABLE = "ALTER TABLE `reforged_bingo_cards` ADD COLUMN IF NOT EXISTS completedCards INT UNSIGNED NOT NULL;";
 
-    public static final String UPDATE_PLAYER_BINGO_CARD = "INSERT INTO `reforged_bingo_cards`(uuid, card, timeStarted) VALUES (?, ?, ?) " +
-            "ON DUPLICATE KEY UPDATE card = VALUES(`card`), timeStarted = VALUES(`timeStarted`);";
+    public static final String LOAD_PLAYER_BINGO_CARD = "SELECT card, timeStarted, completedCards FROM `reforged_bingo_cards` WHERE uuid = ?;";
+
+    public static final String UPDATE_PLAYER_BINGO_CARD = "INSERT INTO `reforged_bingo_cards`(uuid, card, timeStarted, completedCards) VALUES (?, ?, ?, ?) " +
+            "ON DUPLICATE KEY UPDATE card = VALUES(`card`), timeStarted = VALUES(`timeStarted`), completedCards = VALUES(`completedCards`);";
 
 }

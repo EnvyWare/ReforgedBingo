@@ -74,10 +74,12 @@ public class ReforgedBingo {
                 this.database = new SimpleHikariDatabase(this.config.getDatabase());
 
                 try (Connection connection = this.database.getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE);
-                     PreparedStatement alterStatement = connection.prepareStatement(BingoQueries.ALTER_TABLE)) {
+                     PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE)) {
                     preparedStatement.executeUpdate();
-                    alterStatement.executeUpdate();
+
+                    try (PreparedStatement alterStatement = connection.prepareStatement(BingoQueries.ALTER_TABLE)) {
+                        alterStatement.executeUpdate();
+                    } catch (SQLException ignored) {}
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -138,5 +140,9 @@ public class ReforgedBingo {
         }
 
         return false;
+    }
+
+    public Logger getLogger() {
+        return this.logger;
     }
 }

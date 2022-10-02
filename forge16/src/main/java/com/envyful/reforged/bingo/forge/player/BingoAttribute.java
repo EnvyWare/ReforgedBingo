@@ -70,7 +70,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
             this.bingoCard = UtilGson.GSON.fromJson(resultSet.getString("card"), CardSlot[][].class);
             this.completed = resultSet.getInt("completedCards");
         } catch (SQLException e) {
-            e.printStackTrace();
+            ReforgedBingo.getInstance().getLogger().catching(e);
         }
     }
 

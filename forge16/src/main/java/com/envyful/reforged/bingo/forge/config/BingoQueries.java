@@ -12,7 +12,7 @@ public class BingoQueries {
             "PRIMARY KEY(id)" +
             ");";
 
-    public static final String ALTER_TABLE = "ALTER TABLE `reforged_bingo_cards` ADD COLUMN IF NOT EXISTS completedCards INT UNSIGNED NOT NULL;";
+    public static final String ALTER_TABLE = "ALTER TABLE `reforged_bingo_cards` ADD COLUMN completedCards INT UNSIGNED NOT NULL;";
 
     public static final String LOAD_PLAYER_BINGO_CARD = "SELECT card, timeStarted, completedCards FROM `reforged_bingo_cards` WHERE uuid = ?;";
 

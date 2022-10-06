@@ -95,12 +95,12 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     }
 
     public void generateNewCard() {
-        this.bingoCard = new CardSlot[4][7];
+        this.bingoCard = new CardSlot[this.manager.getConfig().getHeight()][this.manager.getConfig().getWidth()];
 
-        for (int y = 0; y < 4; y++) {
+        for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {
             CardSlot[] currentLine = this.bingoCard[y];
 
-            for (int x = 0; x < 7; x++) {
+            for (int x = 0; x < this.manager.getConfig().getWidth(); x++) {
                 Species species = PixelmonSpecies.getRandomSpecies();
 
                 while (!this.canPickPokemon(species)) {
@@ -182,8 +182,8 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     public void display(Pane pane) {
         Displayable complete = GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
 
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 7; x++) {
+        for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {
+            for (int x = 0; x < this.manager.getConfig().getWidth(); x++) {
                 if (this.bingoCard[y][x].isComplete()) {
                     pane.set(1 + x, 1 + y, complete);
                     continue;
@@ -197,7 +197,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                     lore.add(UtilChatColour.colour(s));
                 }
 
-                pane.set(1 + x, 1 + y,
+                pane.set(this.manager.getConfig().getStartingPosX() + x, this.manager.getConfig().getStartingPosY() + y,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
                                         .addLore(lore.toArray(new ITextComponent[0]))

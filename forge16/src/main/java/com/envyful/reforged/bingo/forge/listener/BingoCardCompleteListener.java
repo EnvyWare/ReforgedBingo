@@ -47,10 +47,18 @@ public class BingoCardCompleteListener extends LazyListener {
         }
 
         for (String command : commands) {
+            if (command == null) {
+                continue;
+            }
+
             UtilForgeServer.executeCommand(command.replace("%player%", event.getPlayer().getParent().getName().getString()));
         }
 
         for (String message : messages) {
+            if (message.isEmpty()) {
+                continue;
+            }
+
             event.getPlayer().message(UtilChatColour.translateColourCodes('&', message));
         }
     }

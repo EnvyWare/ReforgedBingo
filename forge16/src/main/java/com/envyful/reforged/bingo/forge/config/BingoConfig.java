@@ -7,6 +7,7 @@ import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.player.SaveMode;
+import com.envyful.api.reforged.pixelmon.config.SpriteConfig;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -68,6 +69,13 @@ public class BingoConfig extends AbstractYamlConfig {
             "&eWhat if I have two of the same pokemon?",
             "&7You simply just have to find and catch that pokemon twice."
     ), 4, 0, Maps.newHashMap());
+
+    private List<Integer> cardPositions = Lists.newArrayList(
+            11, 12, 13, 14, 15, 16, 17,
+            20, 21, 22, 23, 24, 25, 26,
+            29, 30, 31, 32, 33, 34, 35,
+            38, 39, 40, 41, 42, 43, 44
+    );
 
     public BingoConfig() {
         super();
@@ -151,5 +159,9 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public int getStartingPosX() {
         return this.startingPosX;
+    }
+
+    public List<Integer> getCardPositions() {
+        return this.cardPositions;
     }
 }

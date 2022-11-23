@@ -182,10 +182,15 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     public void display(Pane pane) {
         Displayable complete = GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
 
+        int slot = 0;
+
         for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {
             for (int x = 0; x < this.manager.getConfig().getWidth(); x++) {
+                int position = this.manager.getConfig().getCardPositions().get(slot);
+                ++slot;
+
                 if (this.bingoCard[y][x].isComplete()) {
-                    pane.set(1 + x, 1 + y, complete);
+                    pane.set(position % 9, position / 9, complete);
                     continue;
                 }
 
@@ -197,7 +202,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                     lore.add(UtilChatColour.colour(s));
                 }
 
-                pane.set(this.manager.getConfig().getStartingPosX() + x, this.manager.getConfig().getStartingPosY() + y,
+                pane.set(position % 9, position / 9,
                         GuiFactory.displayableBuilder(ItemStack.class)
                                 .itemStack(new ItemBuilder(UtilSprite.getPixelmonSprite(cardSlot.getSpecies()))
                                         .addLore(lore.toArray(new ITextComponent[0]))

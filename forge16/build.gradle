@@ -31,10 +31,6 @@ repositories {
 
     maven { url 'https://jitpack.io' }
 
-    flatDir {
-        dirs '../Libraries/'
-    }
-
     ivy {
         setUrl('https://download.nodecdn.net/containers/reforged/server/release')
         metadataSources {
@@ -48,7 +44,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-    implementation 'pixelmon:Pixelmon-1.16.5-9.0.8a-server:9.0.8'
+    implementation 'pixelmon:Pixelmon-1.16.5-9.1.0-server:9.1.0'
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 

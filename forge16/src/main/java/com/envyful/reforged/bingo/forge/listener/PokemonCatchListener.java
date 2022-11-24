@@ -20,7 +20,7 @@ public class PokemonCatchListener {
 
     @SubscribeEvent
     public void onBingoSlotComplete(CaptureEvent.SuccessfulCapture event) {
-        EnvyPlayer<ServerPlayerEntity> player = this.mod.getPlayerManager().getPlayer(event.player);
+        EnvyPlayer<ServerPlayerEntity> player = this.mod.getPlayerManager().getPlayer(event.getPlayer());
 
         if (player == null) {
             return;
@@ -37,7 +37,7 @@ public class PokemonCatchListener {
 
     @SubscribeEvent
     public void onRaidDenCapture(CaptureEvent.SuccessfulRaidCapture event) {
-        EnvyPlayer<ServerPlayerEntity> player = this.mod.getPlayerManager().getPlayer(event.player);
+        EnvyPlayer<ServerPlayerEntity> player = this.mod.getPlayerManager().getPlayer(event.getPlayer());
 
         if (player == null) {
             return;

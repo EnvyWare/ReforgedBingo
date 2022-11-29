@@ -3,6 +3,7 @@ package com.envyful.reforged.bingo.forge.config;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.*;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.player.SaveMode;
 import com.google.common.collect.ImmutableMap;
@@ -11,6 +12,7 @@ import com.google.common.collect.Maps;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.List;
@@ -39,19 +41,27 @@ public class BingoConfig extends AbstractYamlConfig {
     private transient List<Species> blacklistedSpawnsCache = null;
 
     private ConfigRandomWeightedSet<BingoReward> slotCompleteRewards = new ConfigRandomWeightedSet<>(
-            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example",
+                    Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%"),
+                    Lists.newArrayList("&e&l(!) &eWell done, you just completed a slot on your bingo card!")))
     );
 
     private ConfigRandomWeightedSet<BingoReward> lineCompleteRewards = new ConfigRandomWeightedSet<>(
-            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example",
+                    Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%"),
+                    Lists.newArrayList("&e&l(!) &eWell done, you just completed a line on your bingo card!")))
     );
 
     private ConfigRandomWeightedSet<BingoReward> cardCompleteRewards = new ConfigRandomWeightedSet<>(
-            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example",
+                    Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%"),
+                    Lists.newArrayList("&e&l(!) &eWell done, your entire bingo card!")))
     );
 
     private ConfigRandomWeightedSet<BingoReward> columnCompleteRewards = new ConfigRandomWeightedSet<>(
-            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example",
+                    Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%"),
+                    Lists.newArrayList("&e&l(!) &eWell done, your column complete.")))
     );
 
     private List<String> cardSlotCommands = Lists.newArrayList("pwiki %pokemon%");
@@ -180,18 +190,28 @@ public class BingoConfig extends AbstractYamlConfig {
 
         private String name;
         private List<String> commands;
+        private List<String> messages;
 
-        public BingoReward(String name, List<String> commands) {
+        public BingoReward(String name, List<String> commands, List<String> messages) {
             this.name = name;
             this.commands = commands;
+            this.messages = messages;
         }
 
         public BingoReward() {
         }
 
-        public void executeCommands(ServerPlayerEntity player) {
-            for (String command : this.commands) {
-                UtilForgeServer.executeCommand(command.replace("%player%", player.getName().getString()).replace("%reward%", this.name));
+        public void execute(ServerPlayerEntity player) {
+            if (this.commands != null && !this.commands.isEmpty()) {
+                for (String command : this.commands) {
+                    UtilForgeServer.executeCommand(command.replace("%player%", player.getName().getString()).replace("%reward%", this.name));
+                }
+            }
+
+            if (this.messages != null && !this.messages.isEmpty()) {
+                for (String message : this.messages) {
+                    player.sendMessage(UtilChatColour.colour(message.replace("%player%", player.getName().getString()).replace("%reward%", this.name)), Util.NIL_UUID);
+                }
             }
         }
     }

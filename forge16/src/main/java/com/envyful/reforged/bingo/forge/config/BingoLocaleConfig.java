@@ -12,10 +12,6 @@ import java.util.List;
 public class BingoLocaleConfig extends AbstractYamlConfig {
 
     private String cardReset = "&e&l(!) &eYour bingo card was just reset!\n&7You have 24 hours to complete it. Good luck!";
-    private String slotCompleteMessage = "&e&l(!) &eWell done, you just completed a slot on your bingo card!";
-    private String lineCompleteMessage = "&e&l(!) &eWell done, you just completed a line on your bingo card!";
-    private String cardCompleteMessage = "&e&l(!) &eWell done, your entire bingo card!";
-    private String columnCompleteMessage = "&e&l(!) &eWell done, your column complete.";
     private String remainingTimeMessage = "&e&l(!) &eYou have &b%hours%&e hours left to complete your card!";
 
     private String reloadMessage = "&e&l(!) &eReloaded configs";
@@ -39,18 +35,6 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
         return this.cardReset;
     }
 
-    public String getSlotCompleteMessage() {
-        return this.slotCompleteMessage;
-    }
-
-    public String getLineCompleteMessage() {
-        return this.lineCompleteMessage;
-    }
-
-    public String getCardCompleteMessage() {
-        return this.cardCompleteMessage;
-    }
-
     public String getRemainingTimeMessage() {
         return this.remainingTimeMessage;
     }
@@ -61,10 +45,6 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     public String getRerollCardMessage() {
         return this.rerollCardMessage;
-    }
-
-    public String getColumnCompleteMessage() {
-        return this.columnCompleteMessage;
     }
 
     public String getSpawnTimesDelimiter() {

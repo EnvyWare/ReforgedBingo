@@ -1,6 +1,5 @@
 package com.envyful.reforged.bingo.forge.listener;
 
-import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.listener.LazyListener;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
@@ -23,26 +22,21 @@ public class BingoCardCompleteListener extends LazyListener {
     @SubscribeEvent
     public void onBingoSlotComplete(BingoSlotCompleteEvent event) {
         List<BingoConfig.BingoReward> commands = Lists.newArrayList();
-        List<String> messages = Lists.newArrayList();
 
         event.getAttribute().setCompleted(event.getAttribute().getCompleted() + 1);
 
         commands.add(this.mod.getConfig().getSlotCompleteReward());
-        messages.add(this.mod.getLocale().getSlotCompleteMessage());
 
         if (event.isLineComplete()) {
             commands.add(this.mod.getConfig().getLineCompleteRewards());
-            messages.add(this.mod.getLocale().getLineCompleteMessage());
         }
 
         if (event.isCardComplete()) {
             commands.add(this.mod.getConfig().getCardCompleteRewards());
-            messages.add(this.mod.getLocale().getCardCompleteMessage());
         }
 
         if (event.isColumnComplete()) {
             commands.add(this.mod.getConfig().getColumnCompleteRewards());
-            messages.add(this.mod.getLocale().getColumnCompleteMessage());
         }
 
         for (BingoConfig.BingoReward command : commands) {
@@ -50,15 +44,7 @@ public class BingoCardCompleteListener extends LazyListener {
                 continue;
             }
 
-            command.executeCommands(event.getPlayer().getParent());
-        }
-
-        for (String message : messages) {
-            if (message.isEmpty()) {
-                continue;
-            }
-
-            event.getPlayer().message(UtilChatColour.translateColourCodes('&', message));
+            command.execute(event.getPlayer().getParent());
         }
     }
 }

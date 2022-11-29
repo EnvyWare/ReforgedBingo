@@ -20,6 +20,7 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     private String reloadMessage = "&e&l(!) &eReloaded configs";
     private String rerollCardMessage = "&e&l(!) &eRe-rolled card for %player%";
+    private String spawnTimesDelimiter = "&7, &e";
 
     private List<String> cardSlotLore = Lists.newArrayList(
             "&7",
@@ -64,5 +65,9 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     public String getColumnCompleteMessage() {
         return this.columnCompleteMessage;
+    }
+
+    public String getSpawnTimesDelimiter() {
+        return this.spawnTimesDelimiter;
     }
 }

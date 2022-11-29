@@ -11,6 +11,7 @@ import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.EnvyPlayer;
 import com.envyful.api.player.save.attribute.DataDirectory;
+import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
@@ -199,7 +200,9 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                 List<ITextComponent> lore = Lists.newArrayList();
 
                 for (String s : ReforgedBingo.getInstance().getLocale().getCardSlotLore()) {
-                    lore.add(UtilChatColour.colour(s));
+                    lore.add(UtilChatColour.colour(s.replace("%spawn_times%", String.join(
+                            ReforgedBingo.getInstance().getLocale().getSpawnTimesDelimiter(),
+                            UtilPokemonInfo.getSpawnTimes(cardSlot.getSpecies().getDefaultForm())))));
                 }
 
                 pane.set(position % 9, position / 9,

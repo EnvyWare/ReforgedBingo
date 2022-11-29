@@ -1,18 +1,16 @@
 package com.envyful.reforged.bingo.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
-import com.envyful.api.config.type.ConfigInterface;
-import com.envyful.api.config.type.ConfigItem;
-import com.envyful.api.config.type.ExtendedConfigItem;
-import com.envyful.api.config.type.SQLDatabaseDetails;
+import com.envyful.api.config.type.*;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.player.SaveMode;
-import com.envyful.api.reforged.pixelmon.config.SpriteConfig;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.List;
@@ -40,11 +38,23 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> blacklistedSpawns = Lists.newArrayList();
     private transient List<Species> blacklistedSpawnsCache = null;
 
-    private List<String> slotCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 1");
-    private List<String> lineCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 5");
-    private List<String> cardCompleteRewards = Lists.newArrayList("give %player% minecraft:diamond 10");
+    private ConfigRandomWeightedSet<BingoReward> slotCompleteRewards = new ConfigRandomWeightedSet<>(
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+    );
+
+    private ConfigRandomWeightedSet<BingoReward> lineCompleteRewards = new ConfigRandomWeightedSet<>(
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+    );
+
+    private ConfigRandomWeightedSet<BingoReward> cardCompleteRewards = new ConfigRandomWeightedSet<>(
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+    );
+
+    private ConfigRandomWeightedSet<BingoReward> columnCompleteRewards = new ConfigRandomWeightedSet<>(
+            new ConfigRandomWeightedSet.WeightedObject<>(10, new BingoReward("Example", Lists.newArrayList("give %player% minecraft:diamond 1", "broadcast %reward%")))
+    );
+
     private List<String> cardSlotCommands = Lists.newArrayList("pwiki %pokemon%");
-    private List<String> columnCompleteRewards = Lists.newArrayList("give %player% stone{display:{Name:'[{\"text\":\"SmellyHacko\",\"italic\":false}]'}} 1");
 
     private ConfigItem completeItem = new ConfigItem(
             "minecraft:lime_stained_glass_pane", 1, (byte) 5, "&a&lCOMPLETE", Lists.newArrayList(), Maps.newHashMap()
@@ -117,20 +127,20 @@ public class BingoConfig extends AbstractYamlConfig {
         return this.blacklistedSpawnsCache;
     }
 
-    public List<String> getSlotCompleteRewards() {
-        return this.slotCompleteRewards;
+    public BingoReward getSlotCompleteReward() {
+        return this.slotCompleteRewards.getRandom();
     }
 
-    public List<String> getLineCompleteRewards() {
-        return this.lineCompleteRewards;
+    public BingoReward getLineCompleteRewards() {
+        return this.lineCompleteRewards.getRandom();
     }
 
-    public List<String> getCardCompleteRewards() {
-        return this.cardCompleteRewards;
+    public BingoReward getCardCompleteRewards() {
+        return this.cardCompleteRewards.getRandom();
     }
 
-    public List<String> getColumnCompleteRewards() {
-        return this.columnCompleteRewards;
+    public BingoReward getColumnCompleteRewards() {
+        return this.columnCompleteRewards.getRandom();
     }
 
     public ExtendedConfigItem getHelpItem() {
@@ -163,5 +173,26 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public List<Integer> getCardPositions() {
         return this.cardPositions;
+    }
+
+    @ConfigSerializable
+    public static class BingoReward {
+
+        private String name;
+        private List<String> commands;
+
+        public BingoReward(String name, List<String> commands) {
+            this.name = name;
+            this.commands = commands;
+        }
+
+        public BingoReward() {
+        }
+
+        public void executeCommands(ServerPlayerEntity player) {
+            for (String command : this.commands) {
+                UtilForgeServer.executeCommand(command.replace("%player%", player.getName().getString()).replace("%reward%", this.name));
+            }
+        }
     }
 }

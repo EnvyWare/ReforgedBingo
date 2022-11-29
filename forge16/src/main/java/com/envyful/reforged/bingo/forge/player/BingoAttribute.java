@@ -114,7 +114,7 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
 
         this.started = System.currentTimeMillis();
 
-        this.parent.message(UtilChatColour.translateColourCodes('&', this.manager.getLocale().getCardReset()));
+        this.parent.message(UtilChatColour.colour(this.manager.getLocale().getCardReset()));
     }
 
     private boolean canPickPokemon(Species value) {
@@ -200,7 +200,10 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
                 List<ITextComponent> lore = Lists.newArrayList();
 
                 for (String s : ReforgedBingo.getInstance().getLocale().getCardSlotLore()) {
-                    lore.add(UtilChatColour.colour(s.replace("%spawn_times%", String.join(
+                    lore.add(UtilChatColour.colour(s
+                            .replace("%biomes%", String.join(ReforgedBingo.getInstance().getLocale().getBiomeInfoDelimiter(), UtilPokemonInfo.getSpawnBiomes(cardSlot.getSpecies().getDefaultForm())))
+                            .replace("%catch_rate%", String.join(ReforgedBingo.getInstance().getLocale().getCatchRateDelimiter(), UtilPokemonInfo.getCatchRate(cardSlot.getSpecies().getDefaultForm())))
+                            .replace("%spawn_times%", String.join(
                             ReforgedBingo.getInstance().getLocale().getSpawnTimesDelimiter(),
                             UtilPokemonInfo.getSpawnTimes(cardSlot.getSpecies().getDefaultForm())))));
                 }

@@ -17,6 +17,8 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
     private String reloadMessage = "&e&l(!) &eReloaded configs";
     private String rerollCardMessage = "&e&l(!) &eRe-rolled card for %player%";
     private String spawnTimesDelimiter = "&7, &e";
+    private String biomeInfoDelimiter = "&7, &e";
+    private String catchRateDelimiter = "&7, &e";
 
     private List<String> cardSlotLore = Lists.newArrayList(
             "&7",
@@ -49,5 +51,13 @@ public class BingoLocaleConfig extends AbstractYamlConfig {
 
     public String getSpawnTimesDelimiter() {
         return this.spawnTimesDelimiter;
+    }
+
+    public String getBiomeInfoDelimiter() {
+        return this.biomeInfoDelimiter;
+    }
+
+    public String getCatchRateDelimiter() {
+        return this.catchRateDelimiter;
     }
 }

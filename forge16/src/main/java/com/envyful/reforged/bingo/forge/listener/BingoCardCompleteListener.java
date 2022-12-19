@@ -2,12 +2,8 @@ package com.envyful.reforged.bingo.forge.listener;
 
 import com.envyful.api.forge.listener.LazyListener;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
-import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
-import com.google.common.collect.Lists;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.List;
 
 public class BingoCardCompleteListener extends LazyListener {
 
@@ -21,30 +17,20 @@ public class BingoCardCompleteListener extends LazyListener {
 
     @SubscribeEvent
     public void onBingoSlotComplete(BingoSlotCompleteEvent event) {
-        List<BingoConfig.BingoReward> commands = Lists.newArrayList();
-
         event.getAttribute().setCompleted(event.getAttribute().getCompleted() + 1);
 
-        commands.add(this.mod.getConfig().getSlotCompleteReward());
+        this.mod.getConfig().getSlotCompleteReward().give(event.getPlayer().getParent());
 
         if (event.isLineComplete()) {
-            commands.add(this.mod.getConfig().getLineCompleteRewards());
+            this.mod.getConfig().getLineCompleteRewards().give(event.getPlayer().getParent());
         }
 
         if (event.isCardComplete()) {
-            commands.add(this.mod.getConfig().getCardCompleteRewards());
+            this.mod.getConfig().getCardCompleteRewards().give(event.getPlayer().getParent());
         }
 
         if (event.isColumnComplete()) {
-            commands.add(this.mod.getConfig().getColumnCompleteRewards());
-        }
-
-        for (BingoConfig.BingoReward command : commands) {
-            if (command == null) {
-                continue;
-            }
-
-            command.execute(event.getPlayer().getParent());
+            this.mod.getConfig().getColumnCompleteRewards().give(event.getPlayer().getParent());
         }
     }
 }

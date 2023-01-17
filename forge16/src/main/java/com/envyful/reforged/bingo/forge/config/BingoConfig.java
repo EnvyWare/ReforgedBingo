@@ -3,19 +3,14 @@ package com.envyful.reforged.bingo.forge.config;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.*;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
-import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
-import com.envyful.api.forge.server.UtilForgeServer;
-import com.envyful.api.math.RandomWeightedSet;
 import com.envyful.api.player.SaveMode;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Util;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.List;
@@ -29,8 +24,7 @@ public class BingoConfig extends AbstractYamlConfig {
             "admin", "password", "reforged");
 
     private ConfigInterface configInterface = new ConfigInterface("Bingo", 6, "BLOCK", Maps.newHashMap(ImmutableMap.of(
-            "one",
-            new ConfigItem("minecraft:black_stained_glass_pane", 1, (byte) 15,  " ", Lists.newArrayList(), Maps.newHashMap()))));
+            "one", ConfigItem.builder().type("minecraft:black_stained_glass_pane").amount(1).name(" ").build())));
 
     private int maximumEvolution = 1;
     private long cardDurationSeconds = 86400;
@@ -73,9 +67,7 @@ public class BingoConfig extends AbstractYamlConfig {
 
     private List<String> cardSlotCommands = Lists.newArrayList("pwiki %pokemon%");
 
-    private ConfigItem completeItem = new ConfigItem(
-            "minecraft:lime_stained_glass_pane", 1, (byte) 5, "&a&lCOMPLETE", Lists.newArrayList(), Maps.newHashMap()
-    );
+    private ConfigItem completeItem = ConfigItem.builder().type("minecraft:lime_stained_glass_pane").amount(1).name("&a&lCOMPLETE").build();
 
     private ExtendedConfigItem helpItem = new ExtendedConfigItem(
             "minecraft:book", 1, (byte) 0, "&eInfo", Lists.newArrayList(

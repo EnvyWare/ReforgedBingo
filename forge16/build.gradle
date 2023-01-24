@@ -51,11 +51,11 @@ dependencies {
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 
-    shadow (group: 'com.envyful.api', name: 'commons', version: '4.0.8')
-    shadow (group: 'com.envyful.api', name: 'forge16', version: '4.0.8') {
+    shadow (group: 'com.envyful.api', name: 'commons', version: '4.1.5')
+    shadow (group: 'com.envyful.api', name: 'forge16', version: '4.1.5') {
         transitive = false
     }
-    shadow (group: 'com.envyful.api', name: 'reforged16', version: '4.0.8') {
+    shadow (group: 'com.envyful.api', name: 'reforged16', version: '4.1.5') {
         transitive = false
     }
 }

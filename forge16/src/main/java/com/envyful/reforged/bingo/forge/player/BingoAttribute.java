@@ -3,13 +3,12 @@ package com.envyful.reforged.bingo.forge.player;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
-import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.item.Displayable;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.json.UtilGson;
-import com.envyful.api.player.EnvyPlayer;
 import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
@@ -28,7 +27,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @DataDirectory("config/players/ReforgedBingo/")
@@ -38,12 +36,8 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     private CardSlot[][] bingoCard;
     private int completed = 0;
 
-    public BingoAttribute(ReforgedBingo manager, EnvyPlayer<?> parent) {
-        super(manager, (ForgeEnvyPlayer) parent);
-    }
-
-    public BingoAttribute(UUID uuid) {
-        super(uuid);
+    public BingoAttribute(ReforgedBingo manager, ForgePlayerManager playerManager) {
+        super(manager, playerManager);
     }
 
     public int getCompleted() {

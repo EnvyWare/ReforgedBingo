@@ -50,6 +50,7 @@ dependencies {
     implementation 'pixelmon:Pixelmon-1.16.5-9.1.5-server:9.1.5'
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
+    shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
     shadow (group: 'com.envyful.api', name: 'commons', version: '4.8.2')
     shadow (group: 'com.envyful.api', name: 'forge16', version: '4.8.2') {

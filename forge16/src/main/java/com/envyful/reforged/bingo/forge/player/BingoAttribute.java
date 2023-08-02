@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -86,6 +87,10 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     }
 
     public boolean checkCardExpiry() {
+        if (this.manager.getConfig().isStaticResetTimeEnabled()) {
+            return System.currentTimeMillis() > this.started;
+        }
+
         return (System.currentTimeMillis() - started) > TimeUnit.SECONDS.toMillis(ReforgedBingo.getInstance().getConfig().getCardDurationSeconds());
     }
 
@@ -107,6 +112,10 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
         }
 
         this.started = System.currentTimeMillis();
+
+        if (this.manager.getConfig().isStaticResetTimeEnabled()) {
+            this.started = this.manager.getConfig().getStaticResetTime().nextExecution(ZonedDateTime.now()).get().toInstant().toEpochMilli();
+        }
 
         this.parent.message(UtilChatColour.colour(this.manager.getLocale().getCardReset()));
     }
@@ -192,6 +201,10 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
     }
 
     public long getTimeRemaining() {
+        if (this.manager.getConfig().isStaticResetTimeEnabled()) {
+            return (TimeUnit.MILLISECONDS.toHours(this.started - System.currentTimeMillis()));
+        }
+
         return (TimeUnit.SECONDS.toHours(ReforgedBingo.getInstance().getConfig().getCardDurationSeconds()) - TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis() - this.started));
     }
 

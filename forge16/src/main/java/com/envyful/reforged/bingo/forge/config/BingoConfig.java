@@ -1,5 +1,10 @@
 package com.envyful.reforged.bingo.forge.config;
 
+import com.cronutils.model.Cron;
+import com.cronutils.model.CronType;
+import com.cronutils.model.definition.CronDefinitionBuilder;
+import com.cronutils.model.time.ExecutionTime;
+import com.cronutils.parser.CronParser;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.*;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
@@ -28,6 +33,9 @@ public class BingoConfig extends AbstractYamlConfig {
 
     private int maximumEvolution = 1;
     private long cardDurationSeconds = 86400;
+    private boolean staticResetTimeEnabled = false;
+    private String staticResetTime;
+    private transient ExecutionTime executionTime;
 
     private int height = 4;
     private int width = 7;
@@ -184,4 +192,17 @@ public class BingoConfig extends AbstractYamlConfig {
         return this.cardPositions;
     }
 
+    public boolean isStaticResetTimeEnabled() {
+        return this.staticResetTimeEnabled;
+    }
+
+    public ExecutionTime getStaticResetTime() {
+        if (this.executionTime == null) {
+            CronParser parser =  new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+            Cron parse = parser.parse(this.staticResetTime);
+            this.executionTime = ExecutionTime.forCron(parse);
+        }
+
+        return this.executionTime;
+    }
 }

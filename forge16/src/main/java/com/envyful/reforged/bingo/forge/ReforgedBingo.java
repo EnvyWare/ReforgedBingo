@@ -61,7 +61,7 @@ public class ReforgedBingo {
         this.reloadConfig();
 
         if (this.config.getSaveMode() == SaveMode.JSON) {
-            this.playerManager.setSaveManager(new JsonSaveManager<>());
+            this.playerManager.setSaveManager(new JsonSaveManager<>(this.playerManager));
         }
 
         this.playerManager.registerAttribute(this, BingoAttribute.class);

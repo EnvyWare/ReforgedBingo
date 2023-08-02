@@ -22,7 +22,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 )
 @SubCommands({
         ReloadCommand.class,
-        ReRollCommand.class
+        ReRollCommand.class,
+        CompleteSlotCommand.class
 })
 public class BingoCardCommand {
 

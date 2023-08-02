@@ -144,6 +144,27 @@ public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
         }
     }
 
+    public boolean completeSlot(int slotY, int slotX) {
+        if (slotY >= this.bingoCard.length) {
+            return false;
+        }
+
+        CardSlot[] cardSlots = this.bingoCard[slotY];
+
+        if (slotX >= cardSlots.length) {
+            return false;
+        }
+
+        this.bingoCard[slotY][slotX].setComplete(true);
+        boolean rowComplete = this.checkRowCompletion(cardSlots);
+        boolean cardComplete = this.checkCardCompletion();
+        boolean columnComplete = this.checkColumnCompletion(slotX);
+        BingoSlotCompleteEvent completeEvent = new BingoSlotCompleteEvent(this.parent,
+                this, rowComplete, cardComplete, columnComplete);
+        MinecraftForge.EVENT_BUS.post(completeEvent);
+        return true;
+    }
+
     private boolean checkRowCompletion(CardSlot[] complete) {
         for (CardSlot cardSlot : complete) {
             if (!cardSlot.isComplete()) {

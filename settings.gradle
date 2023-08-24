@@ -16,3 +16,4 @@ plugins {
 
 rootProject.name = 'ReforgedBingo'
 include 'forge16'
+include 'forge20'

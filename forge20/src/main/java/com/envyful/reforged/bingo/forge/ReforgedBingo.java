@@ -53,7 +53,6 @@ public class ReforgedBingo {
         UtilLogger.setLogger(this.logger);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
-        var l = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(null);
     }
 
     @SubscribeEvent

@@ -54,7 +54,6 @@ dependencies {
 }
 
 shadowJar {
-    finalizedBy('reobfJar')
     configurations = [project.configurations.shadow]
     zip64 = true
     setArchiveClassifier('')
@@ -88,5 +87,10 @@ shadowJar {
     exclude "META-INF/services/**"
 }
 
-jar.finalizedBy('shadowJar')
+afterEvaluate {
+    tasks.reobfJar.configure {
+        finalizedBy('shadowJar')
+    }
+}
+
 build.finalizedBy('versionedRelease')

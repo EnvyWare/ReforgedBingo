@@ -25,6 +25,7 @@ subprojects {
     }
 
     task versionedRelease(type: Copy) {
+        dependsOn('shadowJar')
         delete fileTree('../release/') {
             include '**/*.jar'
         }

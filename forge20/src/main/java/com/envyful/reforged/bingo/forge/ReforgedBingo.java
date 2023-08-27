@@ -26,6 +26,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,6 +53,7 @@ public class ReforgedBingo {
         UtilLogger.setLogger(this.logger);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
+        var l = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(null);
     }
 
     @SubscribeEvent

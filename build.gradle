@@ -8,6 +8,10 @@ subprojects {
         forgeVersion = "none"
     }
 
+    jar {
+        setArchiveBaseName("${rootProject.name}-Forge")
+    }
+
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }

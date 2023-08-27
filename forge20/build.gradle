@@ -55,9 +55,8 @@ dependencies {
 
 shadowJar {
     configurations = [project.configurations.shadow]
-    zip64 = true
     setArchiveClassifier('')
-    setArchiveBaseName(rootProject.name + "-Forge")
+    setArchiveBaseName("${rootProject.name}-Forge")
 
     relocate('org.spongepowered.configurate', 'com.envyful.reforged.bingo.forge.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.reforged.bingo.forge.shade.snakeyaml')
@@ -87,10 +86,6 @@ shadowJar {
     exclude "META-INF/services/**"
 }
 
-afterEvaluate {
-    tasks.reobfJar.configure {
-        finalizedBy('shadowJar')
-    }
-}
-
+jar.finalizedBy('shadowJar')
+shadowJar.finalizedBy('reobfJar')
 build.finalizedBy('versionedRelease')

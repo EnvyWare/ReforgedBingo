@@ -65,6 +65,7 @@ shadowJar {
     relocate('org.slf4j', 'com.envyful.reforged.bingo.forge.shade.slf4j')
     relocate('com.envyful.api', 'com.envyful.reforged.bingo.forge.shade.envy.api')
     relocate('org.bstats', 'com.envyful.reforged.bingo.forge.shade.bstats')
+    relocate('io.netty', 'com.envyful.reforged.bingo.forge.shade.netty')
 
     exclude "**/module-info.class"
 }

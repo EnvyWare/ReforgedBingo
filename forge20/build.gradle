@@ -68,8 +68,24 @@ shadowJar {
     relocate('org.slf4j', 'com.envyful.reforged.bingo.forge.shade.slf4j')
     relocate('com.envyful.api', 'com.envyful.reforged.bingo.forge.shade.envy.api')
     relocate('org.bstats', 'com.envyful.reforged.bingo.forge.shade.bstats')
+    relocate('com.google.common', 'com.envyful.reforged.bingo.forge.shade.guava')
+    relocate('org.apache.logging', 'com.envyful.reforged.bingo.forge.shade.log4j')
+    relocate('io.netty', 'com.envyful.reforged.bingo.forge.shade.netty')
+    relocate('io.lettuce', 'com.envyful.reforged.bingo.forge.shade.lettuce')
+    relocate('com.cronutils', 'com.envyful.reforged.bingo.forge.shade.cronutils')
+    relocate('com.cronutils', 'com.envyful.reforged.bingo.forge.shade.cronutils')
+    relocate('com.sun.el', 'com.envyful.reforged.bingo.forge.shade.sun.el')
+    relocate('javax', 'com.envyful.reforged.bingo.forge.shade.javax')
+    relocate('javax', 'com.envyful.reforged.bingo.forge.shade.javax')
+    relocate('org.reactivestreams', 'com.envyful.reforged.bingo.forge.shade.reactivestreams')
+    relocate('reactor', 'com.envyful.reforged.bingo.forge.shade.reactor')
 
     exclude "**/module-info.class"
+    exclude "**/*.properties"
+    exclude "**/*.xml"
+    exclude "META-INF/versions/9/**"
+    exclude "META-INF/native-image/**"
+    exclude "META-INF/services/**"
 }
 
 jar.finalizedBy('shadowJar')

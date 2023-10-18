@@ -12,9 +12,8 @@ import com.envyful.reforged.bingo.forge.ui.BingoCardUI;
 import net.minecraft.server.level.ServerPlayer;
 
 @Command(
-        value = "bingocard",
-        description = "/bingocard",
-        aliases = {
+        value = {
+                "bingocard",
                 "bingo",
                 "bcard",
                 "bingoc"
@@ -36,7 +35,7 @@ public class BingoCardCommand {
         }
 
         BingoCardUI.open(sender);
-        BingoAttribute attribute = sender.getAttribute(ReforgedBingo.class);
+        BingoAttribute attribute = sender.getAttribute(BingoAttribute.class);
 
         sender.message(UtilChatColour.colour(
                 ReforgedBingo.getInstance().getLocale().getRemainingTimeMessage()

@@ -3,6 +3,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(11)
 forgeVersion = "1.16.5"
 
 minecraft {
@@ -11,27 +12,7 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-    maven {
-        name = 'spongepowered-repo'
-        url = 'https://repo.spongepowered.org/maven'
-    }
-
-    maven { url 'https://jitpack.io' }
-
-    ivy {
-        setUrl('https://download.nodecdn.net/containers/reforged/server/release')
-        metadataSources {
-            artifact()
-        }
-        patternLayout {
-            artifact('[revision]/[artifact].[ext]')
-        }
-    }
-    maven {
-        url "https://maven.envyware.co.uk/releases"
-    }
-}
+repositories {}
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
@@ -43,19 +24,19 @@ dependencies {
 
     shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
-    shadow (group: 'com.envyful.api', name: 'commons', version: '5.0.1')
-    shadow (group: 'com.envyful.api', name: 'forge16', version: '5.0.1') {
+    shadow (group: 'com.envyful.api', name: 'commons', version: '5.5.1')
+    shadow (group: 'com.envyful.api', name: 'forge16', version: '5.5.1') {
         transitive = false
     }
-    shadow (group: 'com.envyful.api', name: 'reforged16', version: '5.0.1') {
+    shadow (group: 'com.envyful.api', name: 'reforged16', version: '5.5.1') {
         transitive = false
     }
 }
 
 shadowJar {
-    finalizedBy('reobfJar')
     configurations = [project.configurations.shadow]
-    setArchiveBaseName(rootProject.name + '-Forge.jar')
+    setArchiveClassifier('')
+    setArchiveBaseName("${rootProject.name}-Forge")
 
     relocate('org.spongepowered.configurate', 'com.envyful.reforged.bingo.forge.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.reforged.bingo.forge.shade.snakeyaml')
@@ -71,4 +52,5 @@ shadowJar {
 }
 
 jar.finalizedBy('shadowJar')
+shadowJar.finalizedBy('reobfJar')
 build.finalizedBy('versionedRelease')

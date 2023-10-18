@@ -1,12 +1,11 @@
 package com.envyful.reforged.bingo.forge.command;
 
-import com.envyful.api.command.annotate.Child;
 import com.envyful.api.command.annotate.Command;
-import com.envyful.api.command.annotate.Permissible;
 import com.envyful.api.command.annotate.executor.Argument;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Completable;
 import com.envyful.api.command.annotate.executor.Sender;
+import com.envyful.api.command.annotate.permission.Permissible;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.command.completion.player.PlayerTabCompleter;
 import com.envyful.api.player.EnvyPlayer;
@@ -16,11 +15,9 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.server.level.ServerPlayer;
 
 @Command(
-        value = "completeslot",
-        description = "Complete's a slot for a player's card"
+        value = "completeslot"
 )
 @Permissible("reforged.bingo.command.complete.slot")
-@Child
 public class CompleteSlotCommand {
 
     @CommandProcessor
@@ -34,7 +31,7 @@ public class CompleteSlotCommand {
             return;
         }
 
-        BingoAttribute attribute = targetPlayer.getAttribute(ReforgedBingo.class);
+        BingoAttribute attribute = targetPlayer.getAttribute(BingoAttribute.class);
 
         if (attribute == null) {
             return;

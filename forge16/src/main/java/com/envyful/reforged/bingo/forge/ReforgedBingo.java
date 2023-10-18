@@ -6,6 +6,7 @@ import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
+import com.envyful.api.forge.command.parser.ForgeAnnotationCommandParser;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
@@ -41,7 +42,7 @@ public class ReforgedBingo {
     private static ReforgedBingo instance;
 
     private ForgePlayerManager playerManager = new ForgePlayerManager();
-    private ForgeCommandFactory commandFactory = new ForgeCommandFactory();
+    private ForgeCommandFactory commandFactory = new ForgeCommandFactory(ForgeAnnotationCommandParser::new, playerManager);
 
     private BingoConfig config;
     private BingoLocaleConfig locale;
@@ -64,7 +65,7 @@ public class ReforgedBingo {
             this.playerManager.setSaveManager(new JsonSaveManager<>(this.playerManager));
         }
 
-        this.playerManager.registerAttribute(this, BingoAttribute.class);
+        this.playerManager.registerAttribute(BingoAttribute.class);
 
         new BingoCardCompleteListener(this);
         new PokemonCatchListener(this);
@@ -105,7 +106,7 @@ public class ReforgedBingo {
 
     @SubscribeEvent
     public void onServerStart(RegisterCommandsEvent event) {
-        this.commandFactory.registerCommand(event.getDispatcher(), new BingoCardCommand());
+        this.commandFactory.registerCommand(event.getDispatcher(), this.commandFactory.parseCommand(new BingoCardCommand()));
     }
 
     public static ReforgedBingo getInstance() {

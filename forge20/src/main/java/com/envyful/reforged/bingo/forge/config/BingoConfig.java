@@ -11,12 +11,12 @@ import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.List;
 
@@ -24,12 +24,23 @@ import java.util.List;
 @ConfigSerializable
 public class BingoConfig extends AbstractYamlConfig {
 
+    @Comment("""
+            The setting to tell the mod how to save the player data.
+            The options are:
+            - JSON
+            - MYSQL
+            """)
     private SaveMode saveMode = SaveMode.JSON;
-    private SQLDatabaseDetails database = new SQLDatabaseDetails("Bingo", "0.0.0.0", 3306,
-            "admin", "password", "reforged");
 
-    private ConfigInterface configInterface = new ConfigInterface("Bingo", 6, "BLOCK", Maps.newHashMap(ImmutableMap.of(
-            "one", ConfigItem.builder().type("minecraft:black_stained_glass_pane").amount(1).name(" ").build())));
+    @Comment("""
+            The MySQL database details.
+            This will only be used if the save mode is set to MYSQL
+            
+            NOTE: DO NOT SHARE THESE WITH ANYONE YOU DO NOT TRUST
+            """)
+    private SQLDatabaseDetails database = SQLDatabaseDetails.DEFAULT;
+
+    private ConfigInterface configInterface = ConfigInterface.defaultInterface("Bingo");
 
     private int maximumEvolution = 1;
     private long cardDurationSeconds = 86400;
@@ -45,30 +56,26 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> blacklistedSpawns = Lists.newArrayList();
     private transient List<Species> blacklistedSpawnsCache = null;
 
-    private ConfigRewardPool slotCompleteRewards = ConfigRewardPool.builder()
+    private ConfigRewardPool slotCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
-            .guranteedReward(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .rewards(
             new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();
 
-    private ConfigRewardPool lineCompleteRewards = ConfigRewardPool.builder()
+    private ConfigRewardPool lineCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
-            .guranteedReward(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .rewards(
                     new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();
 
-    private ConfigRewardPool cardCompleteRewards = ConfigRewardPool.builder()
+    private ConfigRewardPool cardCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
-            .guranteedReward(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .rewards(
                     new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();
 
-    private ConfigRewardPool columnCompleteRewards = ConfigRewardPool.builder()
+    private ConfigRewardPool columnCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
-            .guranteedReward(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .rewards(
                     new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();

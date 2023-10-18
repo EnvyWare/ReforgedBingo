@@ -5,7 +5,7 @@ import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.ForgePlayerManager;
-import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
+import com.envyful.api.forge.player.attribute.ManagedForgeAttribute;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.item.Displayable;
 import com.envyful.api.gui.pane.Pane;
@@ -32,14 +32,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @DataDirectory("config/players/ReforgedBingo/")
-public class BingoAttribute extends AbstractForgeAttribute<ReforgedBingo> {
+public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
 
     private long started;
     private CardSlot[][] bingoCard;
     private int completed = 0;
 
-    public BingoAttribute(ReforgedBingo manager, ForgePlayerManager playerManager) {
-        super(manager, playerManager);
+    public BingoAttribute(ForgePlayerManager playerManager) {
+        super(ReforgedBingo.getInstance(), playerManager);
     }
 
     public int getCompleted() {

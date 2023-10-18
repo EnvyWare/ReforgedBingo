@@ -42,6 +42,10 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
         super(ReforgedBingo.getInstance(), playerManager);
     }
 
+    public BingoAttribute() {
+        super(ReforgedBingo.getInstance(), null);
+    }
+
     public int getCompleted() {
         return this.completed;
     }
@@ -88,7 +92,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     public boolean checkCardExpiry() {
-        if (this.manager.getConfig().isStaticResetTimeEnabled()) {
+        if (ReforgedBingo.getInstance().getConfig().isStaticResetTimeEnabled()) {
             return System.currentTimeMillis() > this.started;
         }
 

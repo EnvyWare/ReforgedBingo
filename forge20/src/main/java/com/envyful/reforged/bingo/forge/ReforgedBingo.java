@@ -50,8 +50,8 @@ public class ReforgedBingo {
     private Logger logger = LogManager.getLogger("reforgedbingo");
 
     public ReforgedBingo() {
-        UtilLogger.setLogger(this.logger);
         instance = this;
+        UtilLogger.setLogger(this.logger);
         MinecraftForge.EVENT_BUS.register(this);
     }
 

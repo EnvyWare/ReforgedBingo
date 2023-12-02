@@ -14,9 +14,13 @@ import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
+import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import net.minecraft.network.chat.Component;
@@ -29,6 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @DataDirectory("config/players/ReforgedBingo/")
@@ -101,6 +106,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
 
     public void generateNewCard() {
         this.bingoCard = new CardSlot[this.manager.getConfig().getHeight()][this.manager.getConfig().getWidth()];
+        Map<String, Integer> counters = Maps.newHashMap();
 
         for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {
             CardSlot[] currentLine = this.bingoCard[y];
@@ -108,7 +114,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
             for (int x = 0; x < this.manager.getConfig().getWidth(); x++) {
                 Species species = PixelmonSpecies.getRandomSpecies();
 
-                while (!this.canPickPokemon(species)) {
+                while (!this.canPickPokemon(species, counters)) {
                     species = PixelmonSpecies.getRandomSpecies();
                 }
 
@@ -125,12 +131,32 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
         this.parent.message(UtilChatColour.colour(this.manager.getLocale().getCardReset()));
     }
 
-    private boolean canPickPokemon(Species value) {
+    private boolean canPickPokemon(Species value, Map<String, Integer> counters) {
         if (value.getDefaultForm().getPreEvolutions().size() >= this.manager.getConfig().getMaximumEvolution()) {
             return false;
         }
 
-        return !this.manager.isBlacklisted(value);
+        if (this.manager.isBlacklisted(value)) {
+            return false;
+        }
+
+        var pokemon = PokemonFactory.create(value);
+
+        for (var filter : ReforgedBingo.getInstance().getConfig().getFilters()) {
+            if (!filter.getSpec().matches(pokemon)) {
+                continue;
+            }
+
+            var counter = counters.getOrDefault(filter.getSpec().toString(), 0);
+
+            if (counter >= filter.getLimit()) {
+                return false;
+            }
+
+            counters.put(filter.getSpec().toString(), counter + 1);
+        }
+
+        return true;
     }
 
     public void catchPokemon(Species species) {

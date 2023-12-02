@@ -11,14 +11,18 @@ import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.pixelmonmod.api.pokemon.PokemonSpecification;
+import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.List;
+import java.util.Map;
 
 @ConfigPath("config/ReforgedBingo/config.yml")
 @ConfigSerializable
@@ -107,6 +111,10 @@ public class BingoConfig extends AbstractYamlConfig {
             19, 20, 21, 22, 23, 24, 25,
             28, 29, 30, 31, 32, 33, 34,
             37, 38, 39, 40, 41, 42, 43
+    );
+
+    private Map<String, BoardFilter> filters = ImmutableMap.of(
+            "one", new BoardFilter("leg", 1)
     );
 
     public BingoConfig() {
@@ -201,5 +209,37 @@ public class BingoConfig extends AbstractYamlConfig {
         }
 
         return this.executionTime;
+    }
+
+    public List<BoardFilter> getFilters() {
+        return Lists.newArrayList(this.filters.values());
+    }
+
+    @ConfigSerializable
+    public static class BoardFilter {
+
+        private String spec;
+        private transient PokemonSpecification cachedSpec;
+        private int limit;
+
+        public BoardFilter() {
+        }
+
+        public BoardFilter(String spec, int limit) {
+            this.spec = spec;
+            this.limit = limit;
+        }
+
+        public PokemonSpecification getSpec() {
+            if (this.cachedSpec == null) {
+                this.cachedSpec = PokemonSpecificationProxy.create(this.spec).get();
+            }
+
+            return this.cachedSpec;
+        }
+
+        public int getLimit() {
+            return this.limit;
+        }
     }
 }

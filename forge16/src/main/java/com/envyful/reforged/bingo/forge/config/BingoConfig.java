@@ -39,8 +39,6 @@ public class BingoConfig extends AbstractYamlConfig {
 
     private int height = 4;
     private int width = 7;
-    private int startingPosX = 1;
-    private int startingPosY = 1;
 
     private List<String> blacklistedSpawns = Lists.newArrayList();
     private transient List<Species> blacklistedSpawnsCache = null;
@@ -174,14 +172,6 @@ public class BingoConfig extends AbstractYamlConfig {
 
     public int getHeight() {
         return this.height;
-    }
-
-    public int getStartingPosY() {
-        return this.startingPosY;
-    }
-
-    public int getStartingPosX() {
-        return this.startingPosX;
     }
 
     public List<Integer> getCardPositions() {

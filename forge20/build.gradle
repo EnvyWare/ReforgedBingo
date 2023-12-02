@@ -44,11 +44,11 @@ dependencies {
 
     shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
-    shadow group: 'com.envyful.api', name: 'commons', version: '5.5.1'
-    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.5.1') {
+    shadow group: 'com.envyful.api', name: 'commons', version: '5.6.6'
+    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.6.6') {
         transitive = false;
     }
-    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.5.1') {
+    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.6.6') {
         transitive = false;
     }
 }

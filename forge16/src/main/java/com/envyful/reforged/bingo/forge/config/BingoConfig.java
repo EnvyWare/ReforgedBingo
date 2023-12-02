@@ -43,25 +43,25 @@ public class BingoConfig extends AbstractYamlConfig {
     private List<String> blacklistedSpawns = Lists.newArrayList();
     private transient List<Species> blacklistedSpawnsCache = null;
 
-    private ConfigRewardPool slotCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
+    private ConfigRewardPool<ConfigReward> slotCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
             .rewards(
             new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();
 
-    private ConfigRewardPool lineCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
+    private ConfigRewardPool<ConfigReward> lineCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
             .rewards(
                     new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();
 
-    private ConfigRewardPool cardCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
+    private ConfigRewardPool<ConfigReward> cardCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
             .rewards(
                     new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))
             .build();
 
-    private ConfigRewardPool columnCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
+    private ConfigRewardPool<ConfigReward> columnCompleteRewards = ConfigRewardPool.builder(new ConfigReward(Lists.newArrayList("guaranteed reward"), Lists.newArrayList("Hey")))
             .minRolls(1).maxRolls(1)
             .rewards(
                     new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(10, new ConfigReward(Lists.newArrayList("reward"), Lists.newArrayList("Hey")))))

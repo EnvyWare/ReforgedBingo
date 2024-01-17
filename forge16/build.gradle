@@ -24,11 +24,11 @@ dependencies {
 
     shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
-    shadow (group: 'com.envyful.api', name: 'commons', version: '5.6.6')
-    shadow (group: 'com.envyful.api', name: 'forge16', version: '5.6.6') {
+    shadow (group: 'com.envyful.api', name: 'commons', version: '5.7.7')
+    shadow (group: 'com.envyful.api', name: 'forge16', version: '5.7.7') {
         transitive = false
     }
-    shadow (group: 'com.envyful.api', name: 'reforged16', version: '5.6.6') {
+    shadow (group: 'com.envyful.api', name: 'reforged16', version: '5.7.7') {
         transitive = false
     }
 }
@@ -38,17 +38,29 @@ shadowJar {
     setArchiveClassifier('')
     setArchiveBaseName("${rootProject.name}-Forge")
 
-    relocate('org.spongepowered.configurate', 'com.envyful.reforged.bingo.forge.shade.configurate')
-    relocate('org.yaml.snakeyaml', 'com.envyful.reforged.bingo.forge.shade.snakeyaml')
-    relocate('io.leangen.geantyref', 'com.envyful.reforged.bingo.forge.shade.geantyref')
-    relocate('com.google.gson', 'com.envyful.reforged.bingo.forge.shade.gson')
-    relocate('com.zaxxer', 'com.envyful.reforged.bingo.forge.shade.hikari')
-    relocate('org.slf4j', 'com.envyful.reforged.bingo.forge.shade.slf4j')
-    relocate('com.envyful.api', 'com.envyful.reforged.bingo.forge.shade.envy.api')
-    relocate('org.bstats', 'com.envyful.reforged.bingo.forge.shade.bstats')
-    relocate('io.netty', 'com.envyful.reforged.bingo.forge.shade.netty')
+    relocate('org.spongepowered.configurate', 'com.envyful.reforged.bingo.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.reforged.bingo.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.reforged.bingo.shade.geantyref')
+    relocate('com.zaxxer', 'com.envyful.reforged.bingo.shade.hikari')
+    relocate('org.slf4j', 'com.envyful.reforged.bingo.shade.slf4j')
+    relocate('com.envyful.api', 'com.envyful.reforged.bingo.shade.envy.api')
+    relocate('org.bstats', 'com.envyful.reforged.bingo.shade.bstats')
+    relocate('io.netty', 'com.envyful.reforged.bingo.shade.netty')
+    relocate('io.lettuce', 'com.envyful.reforged.bingo.shade.lettuce')
+    relocate('com.cronutils', 'com.envyful.reforged.bingo.shade.cronutils')
+    relocate('com.cronutils', 'com.envyful.reforged.bingo.shade.cronutils')
+    relocate('com.sun.el', 'com.envyful.reforged.bingo.shade.sun.el')
+    relocate('org.reactivestreams', 'com.envyful.reforged.bingo.shade.reactivestreams')
+    relocate('reactor', 'com.envyful.reforged.bingo.shade.reactor')
 
+    exclude "com/google/**"
+    exclude "javax/**"
     exclude "**/module-info.class"
+    exclude "**/*.properties"
+    exclude "**/*.xml"
+    exclude "META-INF/versions/9/**"
+    exclude "META-INF/native-image/**"
+    exclude "META-INF/services/**"
 }
 
 jar.finalizedBy('shadowJar')

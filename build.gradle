@@ -1,5 +1,6 @@
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
 
     group = 'com.envyful.reforged.bingo'
     version = '2.9.0'
@@ -28,6 +29,38 @@ subprojects {
             patternLayout {
                 artifact('[revision]/[artifact].[ext]')
             }
+        }
+    }
+
+    afterEvaluate {
+        publishing {
+            repositories {
+                maven {
+                    name = "envyware"
+                    url = uri("https://maven.envyware.co.uk/releases")
+                    credentials(PasswordCredentials)
+                    authentication {
+                        basic(BasicAuthentication)
+                    }
+                }
+            }
+            publications {
+                maven(MavenPublication) {
+                    groupId = project.group
+                    artifactId = project.name
+                    version = project.version
+                    artifact("build/libs/${rootProject.name}-Forge-${version}.jar")
+                }
+            }
+        }
+
+        tasks.named("publishMavenPublicationToEnvywareRepository") {
+            dependsOn shadowJar
+        }
+
+        tasks.register('customPublish') {
+            dependsOn 'build'
+            dependsOn 'publish'
         }
     }
 

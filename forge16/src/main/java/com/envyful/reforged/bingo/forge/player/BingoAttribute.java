@@ -26,10 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -87,12 +84,12 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ReforgedBingo.getInstance().getLogger().catching(e);
         }
     }
 
     public boolean checkCardExpiry() {
-        if (this.manager.getConfig().isStaticResetTimeEnabled()) {
+        if (ReforgedBingo.getInstance().getConfig().isStaticResetTimeEnabled()) {
             return System.currentTimeMillis() > this.started;
         }
 

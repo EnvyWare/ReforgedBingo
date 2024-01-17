@@ -16,14 +16,14 @@ public class CardResetTask implements Runnable {
 
     @Override
     public void run() {
-        for (ServerPlayerEntity player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
-            EnvyPlayer<ServerPlayerEntity> envyPlayer = this.mod.getPlayerManager().getPlayer(player);
+        for (var player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
+            var envyPlayer = this.mod.getPlayerManager().getPlayer(player);
 
             if (envyPlayer == null) {
                 continue;
             }
 
-            BingoAttribute bingoAttribute = envyPlayer.getAttribute(BingoAttribute.class);
+            var bingoAttribute = envyPlayer.getAttributeNow(BingoAttribute.class);
 
             if (bingoAttribute == null) {
                 continue;

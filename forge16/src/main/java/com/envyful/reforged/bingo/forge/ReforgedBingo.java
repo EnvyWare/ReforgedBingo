@@ -39,6 +39,8 @@ import java.util.Objects;
 @Mod("reforgedbingo")
 public class ReforgedBingo {
 
+    private static final Logger LOGGER = LogManager.getLogger("reforgedbingo");
+
     private static ReforgedBingo instance;
 
     private ForgePlayerManager playerManager = new ForgePlayerManager();
@@ -47,10 +49,9 @@ public class ReforgedBingo {
     private BingoConfig config;
     private BingoLocaleConfig locale;
     private Database database;
-    private Logger logger = LogManager.getLogger("reforgedbingo");
 
     public ReforgedBingo() {
-        UtilLogger.setLogger(this.logger);
+        UtilLogger.setLogger(LOGGER);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -100,7 +101,7 @@ public class ReforgedBingo {
             this.config = YamlConfigFactory.getInstance(BingoConfig.class);
             this.locale = YamlConfigFactory.getInstance(BingoLocaleConfig.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().error("Failed to load config", e);
         }
     }
 
@@ -143,7 +144,7 @@ public class ReforgedBingo {
         return false;
     }
 
-    public Logger getLogger() {
-        return this.logger;
+    public static Logger getLogger() {
+        return LOGGER;
     }
 }

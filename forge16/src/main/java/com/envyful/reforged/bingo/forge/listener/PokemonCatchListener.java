@@ -26,7 +26,7 @@ public class PokemonCatchListener {
             return;
         }
 
-        BingoAttribute attribute = player.getAttribute(BingoAttribute.class);
+        BingoAttribute attribute = player.getAttributeNow(BingoAttribute.class);
 
         if (attribute == null) {
             return;
@@ -43,7 +43,7 @@ public class PokemonCatchListener {
             return;
         }
 
-        BingoAttribute attribute = player.getAttribute(BingoAttribute.class);
+        BingoAttribute attribute = player.getAttributeNow(BingoAttribute.class);
 
         if (attribute == null) {
             return;

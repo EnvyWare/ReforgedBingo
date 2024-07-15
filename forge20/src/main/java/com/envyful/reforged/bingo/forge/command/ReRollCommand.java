@@ -29,7 +29,7 @@ public class ReRollCommand {
             return;
         }
 
-        BingoAttribute attribute = targetPlayer.getAttribute(BingoAttribute.class);
+        BingoAttribute attribute = targetPlayer.getAttributeNow(BingoAttribute.class);
 
         if (attribute == null) {
             return;

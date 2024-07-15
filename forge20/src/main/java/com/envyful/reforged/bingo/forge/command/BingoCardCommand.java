@@ -35,7 +35,7 @@ public class BingoCardCommand {
         }
 
         BingoCardUI.open(sender);
-        BingoAttribute attribute = sender.getAttribute(BingoAttribute.class);
+        BingoAttribute attribute = sender.getAttributeNow(BingoAttribute.class);
 
         sender.message(UtilChatColour.colour(
                 ReforgedBingo.getInstance().getLocale().getRemainingTimeMessage()

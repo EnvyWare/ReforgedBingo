@@ -25,7 +25,7 @@ public class BingoCardUI {
                 .width(9)
                 .build();
 
-        BingoAttribute attribute = player.getAttribute(BingoAttribute.class);
+        BingoAttribute attribute = player.getAttributeNow(BingoAttribute.class);
 
         UtilConfigInterface.fillBackground(pane, config.getConfigInterface());
 

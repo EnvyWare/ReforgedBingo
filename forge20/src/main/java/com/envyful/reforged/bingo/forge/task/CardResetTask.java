@@ -23,7 +23,7 @@ public class CardResetTask implements Runnable {
                 continue;
             }
 
-            BingoAttribute bingoAttribute = envyPlayer.getAttribute(BingoAttribute.class);
+            BingoAttribute bingoAttribute = envyPlayer.getAttributeNow(BingoAttribute.class);
 
             if (bingoAttribute == null) {
                 continue;

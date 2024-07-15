@@ -38,17 +38,17 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.20.2-48.0.30'
 
-    implementation 'pixelmon:Pixelmon-1.20.2-9.2.4-server:9.2.4'
+    implementation 'pixelmon:Pixelmon-1.20.2-9.2.8-server:9.2.8'
 
     implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
 
     shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
-    shadow group: 'com.envyful.api', name: 'commons', version: '5.6.6'
-    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.6.6') {
+    shadow group: 'com.envyful.api', name: 'commons', version: '6.4.2'
+    shadow (group: 'com.envyful.api', name: 'forge20', version: '6.4.2') {
         transitive = false;
     }
-    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.6.6') {
+    shadow (group: 'com.envyful.api', name: 'reforged20', version: '6.4.2') {
         transitive = false;
     }
 }

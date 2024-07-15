@@ -16,7 +16,7 @@ repositories {}
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
-    implementation 'pixelmon:Pixelmon-1.16.5-9.1.9-server:9.1.9'
+    implementation 'pixelmon:Pixelmon-1.16.5-9.1.11-server:9.1.11'
 
     compileOnly "com.envyful.papi:api:2.0.5"
 
@@ -24,11 +24,11 @@ dependencies {
 
     shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
-    shadow (group: 'com.envyful.api', name: 'commons', version: '5.7.7')
-    shadow (group: 'com.envyful.api', name: 'forge16', version: '5.7.7') {
+    shadow (group: 'com.envyful.api', name: 'commons', version: '6.4.2')
+    shadow (group: 'com.envyful.api', name: 'forge16', version: '6.4.2') {
         transitive = false
     }
-    shadow (group: 'com.envyful.api', name: 'reforged16', version: '5.7.7') {
+    shadow (group: 'com.envyful.api', name: 'reforged16', version: '6.4.2') {
         transitive = false
     }
 }

@@ -3,7 +3,6 @@ package com.envyful.reforged.bingo.forge.player;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
-import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.forge.player.attribute.ManagedForgeAttribute;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.item.Displayable;
@@ -12,6 +11,7 @@ import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
+import com.envyful.api.text.Placeholder;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
@@ -26,7 +26,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +42,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     private CardSlot[][] bingoCard;
     private int completed = 0;
 
-    public BingoAttribute(ForgePlayerManager playerManager) {
-        super(ReforgedBingo.getInstance(), playerManager);
+    public BingoAttribute() {
+        super(ReforgedBingo.getInstance());
     }
 
     public int getCompleted() {
@@ -55,7 +58,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     public void load() {
         try (Connection connection = this.manager.getDatabase().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.LOAD_PLAYER_BINGO_CARD)) {
-            preparedStatement.setString(1, this.parent.getUuid().toString());
+            preparedStatement.setString(1, this.id.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -68,7 +71,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
             this.bingoCard = UtilGson.GSON.fromJson(resultSet.getString("card"), CardSlot[][].class);
             this.completed = resultSet.getInt("completedCards");
         } catch (SQLException e) {
-            ReforgedBingo.getInstance().getLogger().catching(e);
+            ReforgedBingo.getLogger().catching(e);
         }
     }
 
@@ -77,14 +80,14 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
         try (Connection connection = this.manager.getDatabase().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.UPDATE_PLAYER_BINGO_CARD)) {
 
-            preparedStatement.setString(1, this.parent.getUuid().toString());
+            preparedStatement.setString(1, this.id.toString());
             preparedStatement.setString(2, UtilGson.GSON.toJson(this.bingoCard));
             preparedStatement.setLong(3, this.started);
             preparedStatement.setInt(4, this.completed);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            ReforgedBingo.getInstance().getLogger().catching(e);
+            ReforgedBingo.getLogger().catching(e);
         }
     }
 
@@ -232,8 +235,6 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     public void display(Pane pane) {
-        Displayable complete = GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
-
         int slot = 0;
 
         for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {
@@ -242,7 +243,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
                 ++slot;
 
                 if (this.bingoCard[y][x].isComplete()) {
-                    pane.set(position % 9, position / 9, complete);
+                    pane.set(position % 9, position / 9, GuiFactory.displayable(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem(),
+                            Placeholder.simple("%pokemon%", this.bingoCard[y][x].getSpecies().getLocalizedName()))));
                     continue;
                 }
 

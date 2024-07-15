@@ -4,7 +4,6 @@ import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
-import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.forge.player.attribute.ManagedForgeAttribute;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.item.Displayable;
@@ -13,13 +12,12 @@ import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
+import com.envyful.api.text.Placeholder;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
-import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.event.BingoSlotCompleteEvent;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
@@ -43,12 +41,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     private CardSlot[][] bingoCard;
     private int completed = 0;
 
-    public BingoAttribute(ForgePlayerManager playerManager) {
-        super(ReforgedBingo.getInstance(), playerManager);
-    }
-
     public BingoAttribute() {
-        super(ReforgedBingo.getInstance(), null);
+        super(ReforgedBingo.getInstance());
     }
 
     public int getCompleted() {
@@ -63,7 +57,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     public void load() {
         try (Connection connection = this.manager.getDatabase().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.LOAD_PLAYER_BINGO_CARD)) {
-            preparedStatement.setString(1, this.parent.getUuid().toString());
+            preparedStatement.setString(1, this.id.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -85,7 +79,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
         try (Connection connection = this.manager.getDatabase().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.UPDATE_PLAYER_BINGO_CARD)) {
 
-            preparedStatement.setString(1, this.parent.getUuid().toString());
+            preparedStatement.setString(1, this.id.toString());
             preparedStatement.setString(2, UtilGson.GSON.toJson(this.bingoCard));
             preparedStatement.setLong(3, this.started);
             preparedStatement.setInt(4, this.completed);
@@ -240,8 +234,6 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     public void display(Pane pane) {
-        Displayable complete = GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem())).build();
-
         int slot = 0;
 
         for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {
@@ -250,7 +242,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
                 ++slot;
 
                 if (this.bingoCard[y][x].isComplete()) {
-                    pane.set(position % 9, position / 9, complete);
+                    pane.set(position % 9, position / 9, GuiFactory.displayable(UtilConfigItem.fromConfigItem(ReforgedBingo.getInstance().getConfig().getCompleteItem(),
+                            Placeholder.simple("%pokemon%", this.bingoCard[y][x].getSpecies().getLocalizedName()))));
                     continue;
                 }
 
@@ -261,7 +254,7 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
                 for (String s : ReforgedBingo.getInstance().getLocale().getCardSlotLore()) {
                     lore.add(UtilChatColour.colour(s
                             .replace("%biomes%", String.join(ReforgedBingo.getInstance().getLocale().getBiomeInfoDelimiter(), UtilPokemonInfo.getSpawnBiomes(cardSlot.getSpecies().getDefaultForm())))
-                            .replace("%catch_rate%", String.join(ReforgedBingo.getInstance().getLocale().getCatchRateDelimiter(), UtilPokemonInfo.getCatchRate(cardSlot.getSpecies().getDefaultForm())))
+                            .replace("%catch_rate%", String.format("%.2f", UtilPokemonInfo.getCatchRatePercentage(cardSlot.getSpecies().getDefaultForm())))
                             .replace("%spawn_times%", String.join(
                             ReforgedBingo.getInstance().getLocale().getSpawnTimesDelimiter(),
                             UtilPokemonInfo.getSpawnTimes(cardSlot.getSpecies().getDefaultForm())))));

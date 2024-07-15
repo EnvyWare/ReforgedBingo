@@ -66,7 +66,7 @@ public class ReforgedBingo {
             this.playerManager.setSaveManager(new JsonSaveManager<>(this.playerManager));
         }
 
-        this.playerManager.registerAttribute(BingoAttribute.class);
+        this.playerManager.registerAttribute(BingoAttribute.class, BingoAttribute::new);
 
         new BingoCardCompleteListener(this);
         new PokemonCatchListener(this);

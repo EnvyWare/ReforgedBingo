@@ -59,6 +59,7 @@ public class ReforgedBingo {
     @SubscribeEvent
     public void onInit(FMLServerAboutToStartEvent event) {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
+        GuiFactory.setPlayerManager(this.playerManager);
 
         this.reloadConfig();
 

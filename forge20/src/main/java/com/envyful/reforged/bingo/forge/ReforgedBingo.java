@@ -9,8 +9,10 @@ import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.command.parser.ForgeAnnotationCommandParser;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
+import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.player.save.impl.JsonSaveManager;
 import com.envyful.reforged.bingo.forge.command.BingoCardCommand;
@@ -59,6 +61,8 @@ public class ReforgedBingo {
     public void onInit(ServerAboutToStartEvent event) {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
         GuiFactory.setPlayerManager(this.playerManager);
+        PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
+        PlatformProxy.setPlayerManager(this.playerManager);
 
         this.reloadConfig();
 

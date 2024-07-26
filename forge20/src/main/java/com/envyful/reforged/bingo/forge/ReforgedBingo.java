@@ -148,7 +148,7 @@ public class ReforgedBingo {
         return false;
     }
 
-    public Logger getLogger() {
-        return this.logger;
+    public static Logger getLogger() {
+        return instance.logger;
     }
 }

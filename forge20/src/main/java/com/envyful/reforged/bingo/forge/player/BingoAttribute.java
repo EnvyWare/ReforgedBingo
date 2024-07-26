@@ -70,8 +70,10 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
             this.bingoCard = UtilGson.GSON.fromJson(resultSet.getString("card"), CardSlot[][].class);
             this.completed = resultSet.getInt("completedCards");
         } catch (SQLException e) {
-            ReforgedBingo.getInstance().getLogger().catching(e);
+            ReforgedBingo.getLogger().catching(e);
         }
+
+        this.checkCardSize();
     }
 
     @Override
@@ -86,7 +88,22 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            ReforgedBingo.getLogger().catching(e);
+        }
+    }
+
+    private void checkCardSize() {
+        if (this.bingoCard.length != this.manager.getConfig().getHeight()) {
+            this.generateNewCard();
+            ReforgedBingo.getLogger().error("Card size mismatch for player {}. Regenerating card...", this.id.toString());
+        }
+
+        for (CardSlot[] cardSlots : this.bingoCard) {
+            if (cardSlots.length != this.manager.getConfig().getWidth()) {
+                this.generateNewCard();
+                ReforgedBingo.getLogger().error("Card size mismatch for player {}. Regenerating card...", this.id.toString());
+                return;
+            }
         }
     }
 
@@ -154,6 +171,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     public void catchPokemon(Species species) {
+        this.checkCardSize();
+
         for (CardSlot[] cardSlots : this.bingoCard) {
             for (int i = 0; i < cardSlots.length; i++) {
                 CardSlot cardSlot = cardSlots[i];
@@ -173,6 +192,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     public boolean completeSlot(int slotY, int slotX) {
+        this.checkCardSize();
+
         if (slotY >= this.bingoCard.length) {
             return false;
         }
@@ -234,6 +255,8 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     public void display(Pane pane) {
+        this.checkCardSize();
+
         int slot = 0;
 
         for (int y = 0; y < this.manager.getConfig().getHeight(); y++) {

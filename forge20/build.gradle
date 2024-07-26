@@ -58,6 +58,7 @@ shadowJar {
     setArchiveClassifier('')
     setArchiveBaseName("${rootProject.name}-Forge")
 
+    relocate('org.apache.logging', 'com.envyful.reforged.bingo.shade.log4j')
     relocate('org.spongepowered.configurate', 'com.envyful.reforged.bingo.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.reforged.bingo.shade.snakeyaml')
     relocate('io.leangen.geantyref', 'com.envyful.reforged.bingo.shade.geantyref')
@@ -65,14 +66,13 @@ shadowJar {
     relocate('org.slf4j', 'com.envyful.reforged.bingo.shade.slf4j')
     relocate('com.envyful.api', 'com.envyful.reforged.bingo.shade.envy.api')
     relocate('org.bstats', 'com.envyful.reforged.bingo.shade.bstats')
-    relocate('org.apache.logging', 'com.envyful.reforged.bingo.shade.log4j')
     relocate('io.netty', 'com.envyful.reforged.bingo.shade.netty')
     relocate('io.lettuce', 'com.envyful.reforged.bingo.shade.lettuce')
-    relocate('com.cronutils', 'com.envyful.reforged.bingo.shade.cronutils')
     relocate('com.cronutils', 'com.envyful.reforged.bingo.shade.cronutils')
     relocate('com.sun.el', 'com.envyful.reforged.bingo.shade.sun.el')
     relocate('org.reactivestreams', 'com.envyful.reforged.bingo.shade.reactivestreams')
     relocate('reactor', 'com.envyful.reforged.bingo.shade.reactor')
+    relocate('com.mysql', 'com.envyful.reforged.bingo.shade.mysql')
 
     exclude "com/google/**"
     exclude "javax/**"

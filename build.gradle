@@ -3,7 +3,7 @@ subprojects {
     apply plugin: 'maven-publish'
 
     group = 'com.envyful.reforged.bingo'
-    version = '2.9.5'
+    version = '2.9.6'
 
     ext {
         forgeVersion = "none"

@@ -57,6 +57,11 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     public void setParent(ForgeEnvyPlayer parent) {
         super.setParent(parent);
 
+        if (this.bingoCard == null) {
+            this.generateNewCard();
+            return;
+        }
+
         this.checkCardSize();
     }
 
@@ -69,7 +74,6 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {
-                this.generateNewCard();
                 return;
             }
 

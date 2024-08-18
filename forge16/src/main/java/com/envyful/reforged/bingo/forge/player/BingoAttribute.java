@@ -3,9 +3,9 @@ package com.envyful.reforged.bingo.forge.player;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.ManagedForgeAttribute;
 import com.envyful.api.gui.factory.GuiFactory;
-import com.envyful.api.gui.item.Displayable;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.json.UtilGson;
 import com.envyful.api.player.save.attribute.DataDirectory;
@@ -55,6 +55,13 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
     }
 
     @Override
+    public void setParent(ForgeEnvyPlayer parent) {
+        super.setParent(parent);
+
+        this.checkCardSize();
+    }
+
+    @Override
     public void load() {
         try (Connection connection = this.manager.getDatabase().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.LOAD_PLAYER_BINGO_CARD)) {
@@ -73,8 +80,6 @@ public class BingoAttribute extends ManagedForgeAttribute<ReforgedBingo> {
         } catch (SQLException e) {
             ReforgedBingo.getLogger().catching(e);
         }
-
-        this.checkCardSize();
     }
 
     @Override

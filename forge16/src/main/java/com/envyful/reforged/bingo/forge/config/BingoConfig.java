@@ -6,11 +6,15 @@ import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.time.ExecutionTime;
 import com.cronutils.parser.CronParser;
 import com.envyful.api.config.data.ConfigPath;
-import com.envyful.api.config.type.*;
+import com.envyful.api.config.database.DatabaseDetailsConfig;
+import com.envyful.api.config.type.ConfigInterface;
+import com.envyful.api.config.type.ConfigItem;
+import com.envyful.api.config.type.ConfigRandomWeightedSet;
+import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
-import com.envyful.api.player.SaveMode;
+import com.envyful.api.sqlite.config.SQLiteDatabaseDetailsConfig;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.api.pokemon.PokemonSpecification;
 import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
@@ -26,20 +30,11 @@ import java.util.Map;
 @ConfigSerializable
 public class BingoConfig extends AbstractYamlConfig {
 
-    @Comment("The type of saving to use for the player data (MYSQL, JSON)")
-    private SaveMode saveMode = SaveMode.JSON;
-
-    @Comment("The database details for data if using MYSQL")
-    private SQLDatabaseDetails database = new SQLDatabaseDetails("Bingo", "0.0.0.0", 3306,
-            "admin", "password", "reforged");
+    @Comment("The database details for Bingo. For more information visit https://www.envyware.co.uk/docs/general-help/general-config/config-databases/#sqlite")
+    private DatabaseDetailsConfig databaseDetails = new SQLiteDatabaseDetailsConfig("config/ReforgedBingo/data.db");
 
     @Comment("The gui settings for the bingo card")
-    private ConfigInterface configInterface = ConfigInterface.builder()
-            .title("Bingo")
-            .height(6)
-            .fillType(ConfigInterface.FillType.BLOCK)
-            .fillerItem(ConfigItem.builder().type("minecraft:black_stained_glass_pane").amount(1).name(" ").build())
-            .build();
+    private ConfigInterface configInterface = ConfigInterface.defaultInterface("Bingo");
 
     @Comment("The maximum number of pre-evolutions a Pokemon can have for it to be allowed on the bingo card (0 = baby pokemon like Charmander, 1 = middle evolutions like Charmeleon, 2 = final evolutions like Charizard)")
     private int maximumEvolution = 1;
@@ -144,10 +139,6 @@ public class BingoConfig extends AbstractYamlConfig {
         super();
     }
 
-    public SaveMode getSaveMode() {
-        return this.saveMode;
-    }
-
     public List<String> getCardSlotCommands() {
         return this.cardSlotCommands;
     }
@@ -156,8 +147,8 @@ public class BingoConfig extends AbstractYamlConfig {
         return this.configInterface;
     }
 
-    public SQLDatabaseDetails getDatabase() {
-        return this.database;
+    public DatabaseDetailsConfig getDatabaseDetails() {
+        return this.databaseDetails;
     }
 
     public int getMaximumEvolution() {
@@ -180,19 +171,19 @@ public class BingoConfig extends AbstractYamlConfig {
         return this.blacklistedSpawnsCache;
     }
 
-    public ConfigRewardPool getSlotCompleteReward() {
+    public ConfigRewardPool<ConfigReward> getSlotCompleteReward() {
         return this.slotCompleteRewards;
     }
 
-    public ConfigRewardPool getLineCompleteRewards() {
+    public ConfigRewardPool<ConfigReward> getLineCompleteRewards() {
         return this.lineCompleteRewards;
     }
 
-    public ConfigRewardPool getCardCompleteRewards() {
+    public ConfigRewardPool<ConfigReward> getCardCompleteRewards() {
         return this.cardCompleteRewards;
     }
 
-    public ConfigRewardPool getColumnCompleteRewards() {
+    public ConfigRewardPool<ConfigReward> getColumnCompleteRewards() {
         return this.columnCompleteRewards;
     }
 
@@ -241,24 +232,19 @@ public class BingoConfig extends AbstractYamlConfig {
     @ConfigSerializable
     public static class BoardFilter {
 
-        private String spec;
-        private transient PokemonSpecification cachedSpec;
+        private PokemonSpecification spec;
         private int limit;
 
         public BoardFilter() {
         }
 
         public BoardFilter(String spec, int limit) {
-            this.spec = spec;
+            this.spec = PokemonSpecificationProxy.create(spec);
             this.limit = limit;
         }
 
         public PokemonSpecification getSpec() {
-            if (this.cachedSpec == null) {
-                this.cachedSpec = PokemonSpecificationProxy.create(this.spec);
-            }
-
-            return this.cachedSpec;
+            return this.spec;
         }
 
         public int getLimit() {

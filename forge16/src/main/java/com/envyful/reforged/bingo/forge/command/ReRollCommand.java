@@ -6,14 +6,11 @@ import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Completable;
 import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.command.annotate.permission.Permissible;
-import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.command.completion.player.PlayerTabCompleter;
-import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.api.platform.Messageable;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
-import net.minecraft.command.ICommandSource;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Util;
 
 @Command(
         value = "reroll"
@@ -22,24 +19,16 @@ import net.minecraft.util.Util;
 public class ReRollCommand {
 
     @CommandProcessor
-    public void onCommand(@Sender ICommandSource sender,
-                          @Completable(PlayerTabCompleter.class) @Argument ServerPlayerEntity target) {
-        EnvyPlayer<ServerPlayerEntity> targetPlayer = ReforgedBingo.getInstance().getPlayerManager().getPlayer(target);
-
-        if (targetPlayer == null) {
-            return;
-        }
-
-        BingoAttribute attribute = targetPlayer.getAttributeNow(BingoAttribute.class);
+    public void onCommand(@Sender Messageable<?> sender,
+                          @Completable(PlayerTabCompleter.class) @Argument ForgeEnvyPlayer target) {
+        var attribute = target.getAttributeNow(BingoAttribute.class);
 
         if (attribute == null) {
             return;
         }
 
         attribute.generateNewCard();
-        sender.sendMessage(UtilChatColour.colour(
-                ReforgedBingo.getInstance().getLocale().getRerollCardMessage()
-                        .replace("%player%", target.getName().getString())
-        ), Util.NIL_UUID);
+        sender.message(ReforgedBingo.getLocale().getRerollCardMessage()
+                .replace("%player%", target.getName()));
     }
 }

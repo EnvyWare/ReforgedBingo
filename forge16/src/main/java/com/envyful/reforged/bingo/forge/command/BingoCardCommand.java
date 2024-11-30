@@ -4,12 +4,10 @@ import com.envyful.api.command.annotate.Command;
 import com.envyful.api.command.annotate.SubCommands;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Sender;
-import com.envyful.api.forge.chat.UtilChatColour;
-import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
 import com.envyful.reforged.bingo.forge.ui.BingoCardUI;
-import net.minecraft.entity.player.ServerPlayerEntity;
 
 @Command(
         value = {
@@ -27,18 +25,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 public class BingoCardCommand {
 
     @CommandProcessor
-    public void run(@Sender ServerPlayerEntity player, String[] args) {
-        EnvyPlayer<ServerPlayerEntity> sender = ReforgedBingo.getInstance().getPlayerManager().getPlayer(player);
-
-        if (sender == null) {
-            return;
-        }
-
+    public void run(@Sender ForgeEnvyPlayer sender, String[] args) {
         BingoCardUI.open(sender);
-        BingoAttribute attribute = sender.getAttributeNow(BingoAttribute.class);
 
-        sender.message(UtilChatColour.colour(
-                ReforgedBingo.getInstance().getLocale().getRemainingTimeMessage()
-                        .replace("%hours%", attribute.getTimeRemaining() + "")));
+        var attribute = sender.getAttributeNow(BingoAttribute.class);
+
+        sender.message(ReforgedBingo.getLocale().getRemainingTimeMessage().replace("%hours%", attribute.getTimeRemaining() + ""));
     }
 }

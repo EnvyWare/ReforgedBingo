@@ -2,28 +2,33 @@ package com.envyful.reforged.bingo.forge;
 
 import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.concurrency.UtilLogger;
+import com.envyful.api.config.database.DatabaseDetailsConfig;
+import com.envyful.api.config.database.DatabaseDetailsRegistry;
+import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
-import com.envyful.api.database.impl.SimpleHikariDatabase;
+import com.envyful.api.forge.chat.ComponentTextFormatter;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.command.parser.ForgeAnnotationCommandParser;
-import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
-import com.envyful.api.player.SaveMode;
-import com.envyful.api.player.save.impl.JsonSaveManager;
+import com.envyful.api.player.Attribute;
+import com.envyful.api.sqlite.config.SQLiteDatabaseDetailsConfig;
 import com.envyful.reforged.bingo.forge.command.BingoCardCommand;
 import com.envyful.reforged.bingo.forge.config.BingoConfig;
 import com.envyful.reforged.bingo.forge.config.BingoLocaleConfig;
-import com.envyful.reforged.bingo.forge.config.BingoQueries;
 import com.envyful.reforged.bingo.forge.listener.BingoCardCompleteListener;
 import com.envyful.reforged.bingo.forge.listener.PokemonCatchListener;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
+import com.envyful.reforged.bingo.forge.player.SQLBingoAttributeAdapter;
+import com.envyful.reforged.bingo.forge.player.SQLiteBingoAttributeAdapter;
 import com.envyful.reforged.bingo.forge.task.CardResetTask;
+import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
@@ -33,13 +38,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Objects;
 
 @Mod("reforgedbingo")
 public class ReforgedBingo {
+
+    private static final Logger LOGGER = LogManager.getLogger("reforgedbingo");
 
     private static ReforgedBingo instance;
 
@@ -49,55 +53,46 @@ public class ReforgedBingo {
     private BingoConfig config;
     private BingoLocaleConfig locale;
     private Database database;
-    private Logger logger = LogManager.getLogger("reforgedbingo");
 
     public ReforgedBingo() {
-        instance = this;
-        UtilLogger.setLogger(this.logger);
-        MinecraftForge.EVENT_BUS.register(this);
-    }
+        SQLiteDatabaseDetailsConfig.register();
+        UtilLogger.setLogger(LOGGER);
 
-    @SubscribeEvent
-    public void onInit(ServerAboutToStartEvent event) {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
         GuiFactory.setPlayerManager(this.playerManager);
         PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
         PlatformProxy.setPlayerManager(this.playerManager);
+        PlatformProxy.setTextFormatter(ComponentTextFormatter.getInstance());
 
+        MinecraftForge.EVENT_BUS.register(this);
+        instance = this;
+    }
+
+    @SubscribeEvent
+    public void onInit(ServerAboutToStartEvent event) {
         this.reloadConfig();
 
-        if (this.config.getSaveMode() == SaveMode.JSON) {
-            this.playerManager.setSaveManager(new JsonSaveManager<>(this.playerManager));
+        var saveMode = DatabaseDetailsRegistry.getRegistry().getKey((Class<DatabaseDetailsConfig>) this.getConfig().getDatabaseDetails().getClass());
+
+        if (saveMode == null) {
+            getLogger().error("Failed to find save mode for Bingo config. Please check your config and try again");
+            return;
         }
 
-        this.playerManager.registerAttribute(BingoAttribute.class, BingoAttribute::new);
+        this.playerManager.getSaveManager().setSaveMode(saveMode);
+        this.playerManager.registerAttribute(Attribute.builder(BingoAttribute.class, ServerPlayer.class)
+                .constructor(BingoAttribute::new)
+                .registerAdapter(SQLDatabaseDetails.ID, new SQLBingoAttributeAdapter())
+                .registerAdapter(SQLiteDatabaseDetailsConfig.ID, new SQLiteBingoAttributeAdapter())
+        );
 
-        new BingoCardCompleteListener(this);
-        new PokemonCatchListener(this);
+        this.database = this.config.getDatabaseDetails().createDatabase();
+        this.playerManager.getSaveManager().getAdapter(BingoAttribute.class).initialize();
 
-        if (this.config.getSaveMode() == SaveMode.MYSQL) {
-            UtilConcurrency.runAsync(() -> {
-                this.database = new SimpleHikariDatabase(this.config.getDatabase());
+        new BingoCardCompleteListener();
+        Pixelmon.EVENT_BUS.register(new PokemonCatchListener());
 
-                try (Connection connection = this.database.getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(BingoQueries.CREATE_TABLE)) {
-                    preparedStatement.executeUpdate();
-
-                    try (PreparedStatement alterStatement = connection.prepareStatement(BingoQueries.ALTER_TABLE)) {
-                        alterStatement.executeUpdate();
-                    } catch (SQLException ignored) {}
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-
-        new ForgeTaskBuilder()
-                .async(true)
-                .delay(10L)
-                .interval(10L)
-                .task(new CardResetTask(this))
-                .start();
+        UtilConcurrency.runRepeatingTask(new CardResetTask(), 25L, 25L);
     }
 
     public void reloadConfig() {
@@ -105,7 +100,7 @@ public class ReforgedBingo {
             this.config = YamlConfigFactory.getInstance(BingoConfig.class);
             this.locale = YamlConfigFactory.getInstance(BingoLocaleConfig.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().error("Failed to load config", e);
         }
     }
 
@@ -118,20 +113,20 @@ public class ReforgedBingo {
         return instance;
     }
 
-    public ForgePlayerManager getPlayerManager() {
-        return this.playerManager;
+    public static ForgePlayerManager getPlayerManager() {
+        return instance.playerManager;
     }
 
-    public BingoConfig getConfig() {
-        return this.config;
+    public static BingoConfig getConfig() {
+        return instance.config;
     }
 
-    public BingoLocaleConfig getLocale() {
-        return this.locale;
+    public static BingoLocaleConfig getLocale() {
+        return instance.locale;
     }
 
-    public Database getDatabase() {
-        return this.database;
+    public static Database getDatabase() {
+        return instance.database;
     }
 
     public boolean isBlacklisted(Species pokemon) {
@@ -139,7 +134,7 @@ public class ReforgedBingo {
             return true;
         }
 
-        for (Species blacklistedSpawn : this.getConfig().getBlacklistedSpawns()) {
+        for (Species blacklistedSpawn : config.getBlacklistedSpawns()) {
             if (Objects.equals(blacklistedSpawn, pokemon)) {
                 return true;
             }
@@ -149,6 +144,6 @@ public class ReforgedBingo {
     }
 
     public static Logger getLogger() {
-        return instance.logger;
+        return LOGGER;
     }
 }

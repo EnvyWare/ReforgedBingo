@@ -6,13 +6,11 @@ import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Completable;
 import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.command.annotate.permission.Permissible;
-import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.command.completion.player.PlayerTabCompleter;
-import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.api.platform.Messageable;
 import com.envyful.reforged.bingo.forge.ReforgedBingo;
 import com.envyful.reforged.bingo.forge.player.BingoAttribute;
-import net.minecraft.commands.CommandSource;
-import net.minecraft.server.level.ServerPlayer;
 
 @Command(
         value = "reroll"
@@ -21,24 +19,16 @@ import net.minecraft.server.level.ServerPlayer;
 public class ReRollCommand {
 
     @CommandProcessor
-    public void onCommand(@Sender CommandSource sender,
-                          @Completable(PlayerTabCompleter.class) @Argument ServerPlayer target) {
-        EnvyPlayer<ServerPlayer> targetPlayer = ReforgedBingo.getInstance().getPlayerManager().getPlayer(target);
-
-        if (targetPlayer == null) {
-            return;
-        }
-
-        BingoAttribute attribute = targetPlayer.getAttributeNow(BingoAttribute.class);
+    public void onCommand(@Sender Messageable<?> sender,
+                          @Completable(PlayerTabCompleter.class) @Argument ForgeEnvyPlayer target) {
+        var attribute = target.getAttributeNow(BingoAttribute.class);
 
         if (attribute == null) {
             return;
         }
 
         attribute.generateNewCard();
-        sender.sendSystemMessage(UtilChatColour.colour(
-                ReforgedBingo.getInstance().getLocale().getRerollCardMessage()
-                        .replace("%player%", target.getName().getString())
-        ));
+        sender.message(ReforgedBingo.getLocale().getRerollCardMessage()
+                .replace("%player%", target.getName()));
     }
 }

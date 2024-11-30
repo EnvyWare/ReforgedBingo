@@ -74,6 +74,7 @@ shadowJar {
     relocate('org.reactivestreams', 'com.envyful.reforged.bingo.shade.reactivestreams')
     relocate('reactor', 'com.envyful.reforged.bingo.shade.reactor')
     relocate('com.mysql', 'com.envyful.reforged.bingo.shade.mysql')
+    relocate('org.sqlite', 'com.envyful.reforged.bingo.shade.mysql')
 
     exclude "com/google/**"
     exclude "javax/**"

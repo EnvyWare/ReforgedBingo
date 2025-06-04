@@ -23,7 +23,7 @@ dependencies {
 
     shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
 
-    var apiVersion = "8.0.7"
+    var apiVersion = "8.0.8"
     shadow (group: 'com.envyful.api', name: 'commons', version: apiVersion)
     shadow (group: 'com.envyful.api', name: 'neo21', version: apiVersion) {
         transitive = false

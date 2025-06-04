@@ -1,0 +1,72 @@
+plugins {
+    id 'net.neoforged.moddev' version '2.0.80'
+    id 'com.gradleup.shadow' version '8.3.6'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+forgeVersion = "1.21.1"
+platform = "NeoForge"
+
+neoForge {
+    version = "21.1.162"
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {}
+
+dependencies {
+    implementation "pixelmon:Pixelmon-1.21.1-9.3.2-universal:9.3.2"
+    interfaceInjectionData("pixelmon:Pixelmon-1.21.1-9.3.2-universal-interfaceinjection:9.3.2@json")
+
+    implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
+
+    shadow group: 'com.cronutils', name: 'cron-utils', version: '9.2.0'
+
+    var apiVersion = "8.0.7"
+    shadow (group: 'com.envyful.api', name: 'commons', version: apiVersion)
+    shadow (group: 'com.envyful.api', name: 'neo21', version: apiVersion) {
+        transitive = false
+    }
+    shadow (group: 'com.envyful.api', name: 'pixel21', version: apiVersion) {
+        transitive = false
+    }
+    shadow (group: 'com.envyful.api', name: 'sqlite', version: apiVersion) {
+        transitive = false
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    setArchiveClassifier('')
+    setArchiveBaseName("${rootProject.name}-NeoForge")
+
+    relocate('org.apache.commons.jexl', 'com.envyful.reforged.bingo.shade.jexl')
+    relocate('org.spongepowered.configurate', 'com.envyful.reforged.bingo.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.reforged.bingo.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.reforged.bingo.shade.geantyref')
+    relocate('com.zaxxer', 'com.envyful.reforged.bingo.shade.hikari')
+    relocate('org.slf4j', 'com.envyful.reforged.bingo.shade.slf4j')
+    relocate('com.envyful.api', 'com.envyful.reforged.bingo.shade.envy.api')
+    relocate('org.bstats', 'com.envyful.reforged.bingo.shade.bstats')
+    relocate('io.netty', 'com.envyful.reforged.bingo.shade.netty')
+    relocate('io.lettuce', 'com.envyful.reforged.bingo.shade.lettuce')
+    relocate('com.cronutils', 'com.envyful.reforged.bingo.shade.cronutils')
+    relocate('com.sun.el', 'com.envyful.reforged.bingo.shade.sun.el')
+    relocate('org.reactivestreams', 'com.envyful.reforged.bingo.shade.reactivestreams')
+    relocate('reactor', 'com.envyful.reforged.bingo.shade.reactor')
+    relocate('com.mysql', 'com.envyful.reforged.bingo.shade.mysql')
+    relocate('uk.co.envyware.helios', 'com.envyful.reforged.bingo.shade.uk.co.envyware.helios')
+
+    exclude "com/google/**"
+    exclude "org/apache/commons/logging/**"
+    exclude "org/apache/logging/log4j/**"
+    exclude "javax/**"
+    exclude "**/module-info.class"
+    exclude "META-INF/versions/9/**"
+    exclude "META-INF/native-image/**"
+    exclude "META-INF/services/**"
+}
+
+jar.finalizedBy('shadowJar')
+build.finalizedBy('versionedRelease')
